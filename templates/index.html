@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Flack</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/styles.css') }}">
+    <script src="{{ url_for('static', filename='index.js') }}" type="text/javascript"></script>
+</head>
+<body>
+    <!-- The Modal to prompt for User input -->
+    <div id="input-modal" class="modal bounce-fade" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="false">
+        <div class="modal-dialog mx-auto">
+            <div class="modal-content text-center">
+                <div class="modal-header mx-auto">
+                    <h5 class="modal-title">Welcome to Flack!</h5>
+                </div>
+                <div class="modal-body">
+                    <p>To get connected with others, you will first need a display name to let others know who they are talking to.</p>
+                    <input id="displayname-input" type="text" placeholder="Your display name here" />
+                </div>
+                <div id="display-name-ok-btn" class="modal-footer mx-auto">
+                    <button type="button" class="btn btn-primary">Use this name</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- The Modal to prompt for channel creation -->
+    <div id="new-channel-modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content text-center">
+                <div class="modal-header mx-auto">
+                    <h5 class="modal-title">Create a new channel</h5>
+                </div>
+                <div class="modal-body">
+                    <p>To create a new channel, all you need is a channel name that does not conflict with the name of any other channel that exists.</p>
+                    <input id="user-input" type="text" placeholder="New channel name here" />
+                </div>
+                <div class="modal-footer mx-auto">
+                    <button id="create-channel-btn" type="button" class="btn btn-primary">Create channel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main section of the app -->
+    <div class="row p-5 main-section">
+        <div class="col-4">
+            <div id="add-new-channel-surface" class="row justify-content-between border-bottom pb-4">
+                <div class="col-md-auto">
+                    <img src="{{ url_for('static', filename='pics/speech-bubble.svg') }}" height="40" />
+                </div>
+                <div class="col align-self-center text-center">
+                    <span id="add-new-channel-text">Add new channel</span>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-8">TO DO: Messages view</div>
+    </div>
+
+</body>
+</html>
