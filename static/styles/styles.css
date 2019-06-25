@@ -70,6 +70,11 @@
     }
 }
 
+.error-message {
+    font-size: 0.8em;
+    color: red;
+}
+
 /* Fade-out animation */
 #input-modal.modal.hide {
     animation-name: hide;
@@ -108,6 +113,7 @@
 }
 
 #new-channel-modal.fade-out {
+    z-index: -1;
     animation-name: fade-out;
     animation-duration: 0.75s;
     animation-fill-mode: forwards;
