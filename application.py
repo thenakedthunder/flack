@@ -18,16 +18,16 @@ def index():
 def create_channel(data):
     channel_name = data["newChannelName"]
 
-    if (channel_name_taken(channel_name)):
+    if (is_channel_name_taken(channel_name)):
         emit("channel name taken", broadcast=True)
         return
 
-    channels.append(channel_name)
+    channels.append(channel_name.lower())
     emit("new channel created", {"channelName": channel_name}, broadcast=True)
 
 
-def channel_name_taken(channel_name):
-    if channel_name in channels:
-        return True;
+def is_channel_name_taken(channel_name):
+    if channel_name.lower() in channels:
+        return True
 
-    return False;
+    return False
