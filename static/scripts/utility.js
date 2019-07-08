@@ -1,7 +1,7 @@
 // FILE: utility.js
 
 
-/* =================== private methods ================= */
+/* ================== "private" methods ================ */
 
 // For displaying the correct feedback
 function _getErrorMessageFrom(placeOfErrorMessage) {
