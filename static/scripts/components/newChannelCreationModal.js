@@ -18,15 +18,18 @@ var newChannelCreationModal = (function () {
     });
 
     socket.on('channel name taken', () => {
-        const placeOfErrorMessage = document.querySelector("#channelname-required");
-        const errorMessage = "Sorry, this channelname is already in use. Please choose another one."
+        const placeOfErrorMessage =
+            document.querySelector("#channelname-required");
+        const errorMessage =
+            "Sorry, this channelname is already in use. Please choose another one."
         showErrorMessage(placeOfErrorMessage, errorMessage)
     });
 
     socket.on('new channel created', data => {
         newChannelModal.classList.replace("fade-in", "fade-out");
         newChannelModal.setAttribute("aria-hidden", "true");
-        setTimeout(() => { newChannelModal.classList.remove("fade-out"); }, 750);
+        setTimeout(() => { newChannelModal.classList.remove("fade-out"); },
+            750);
 
         var newChannelNode = document.createElement("DIV");
         var newChannelNamePar = document.createElement("P");
@@ -44,9 +47,11 @@ var newChannelCreationModal = (function () {
         document.querySelector("#create-channel-btn").onclick = () => {
             const newChannelName =
                 document.querySelector("#new-channel-input").value;
+
+            // this is to check if the channel name is valid
             const placeOfErrorMessage =
                 document.querySelector("#channelname-required");
-            if (!isInputValid(newChannelName, placeOfErrorMessage))
+            if (!validateInputs(newChannelName, placeOfErrorMessage))
                 return;
 
             socket.emit('channel creation',
@@ -55,10 +60,6 @@ var newChannelCreationModal = (function () {
     }
 
     /* =================== public methods ================== */
-
-    function addOnclickEventListeners() {
-        addOnClickEventListenerToNewChannelCreation();
-    }
 
     // Displays the channel creation modal
     function addOnClickEventListenerToNewChannelCreation() {
@@ -75,7 +76,6 @@ var newChannelCreationModal = (function () {
 
     // main init method
     function init() {
-        addOnclickEventListeners();
         addOnClickEventListenerToNewChannelCreation();
     }
 

@@ -13,7 +13,7 @@ function _getErrorMessageFrom(placeOfErrorMessage) {
 
 
 // returns true, if an error message is already displayed. This is to 
-// block the app from "listing" the same messages under each other.
+// block the app from "listing" error messages under each other.
 function _isErrorMessageAlreadyThere(placeOfErrorMessage) {
     if (placeOfErrorMessage.querySelector(".error-message"))
         return true;
@@ -22,8 +22,7 @@ function _isErrorMessageAlreadyThere(placeOfErrorMessage) {
 }
 
 
-// creates a new div with the error message and appends it to the right 
-// place
+// creates a new div with the error message and appends it to the right place
 function _addErrorMessage(errorMessage, placeOfErrorMessage) {
     const errorMessageDiv = document.createElement("DIV");
     // custom-sized red fonts 
@@ -43,6 +42,7 @@ function _removeErrorMessageWhenNeeded(textInput, placeOfErrorMessage) {
             return;
 
         placeOfErrorMessage.removeChild(errorMessage);
+        // also get rid of the red border showing error
         textInput.classList.remove("border", "border-danger");
     };
 }
@@ -51,7 +51,7 @@ function _removeErrorMessageWhenNeeded(textInput, placeOfErrorMessage) {
 /* =================== public methods ================== */
 
 
-function isInputValid(inputValue, placeOfErrorMessage) {
+function validateInputs(inputValue, placeOfErrorMessage) {
     // checks for empty string in user input
     if (!inputValue.trim()) {
         const errorMessage = _getErrorMessageFrom(placeOfErrorMessage);
@@ -84,5 +84,6 @@ function showErrorMessage(placeOfErrorMessage, errorMessage) {
 
     _addErrorMessage(errorMessage, placeOfErrorMessage);
 
+    // event: hide error message when new input is being typed
     _removeErrorMessageWhenNeeded(textInput, placeOfErrorMessage);
 }

@@ -42,12 +42,9 @@ describe("the _isErrorMessageAlreadyThere function", () => {
         "'error-message' is passed",
         () => {
             let element = document.createElement("DIV");
-            let child = document.createElement("DIV");
-            child.classList.add("error-message");
-            element.appendChild(child);
 
             let result = _isErrorMessageAlreadyThere(element);
-            expect(result).toBe(true);
+            expect(result).toBe(false);
         });
 });
 

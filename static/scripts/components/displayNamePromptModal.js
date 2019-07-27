@@ -45,7 +45,7 @@ var displayNamePromptModal = (function () {
             // validate input for empty string, leading and trailing whitespaces
             const placeOfErrorMessage =
                 document.querySelector("#displayname-required");
-            if (!isInputValid(displayNameChosen, placeOfErrorMessage))
+            if (!validateInputs(displayNameChosen, placeOfErrorMessage))
                 return;
 
             // Overwrite the display name currently saved in local storage
