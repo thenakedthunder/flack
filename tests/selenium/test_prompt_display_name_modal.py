@@ -2,15 +2,7 @@
 
 
 import unittest
-
-from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
-
 from test_helper import TestHelper
-
-# Setting up tests
-driver = webdriver.Chrome(ChromeDriverManager().install())
-display_name_input_id = "displayname-input"
 
 
 class Test_prompt_display_name_modal(unittest.TestCase):
@@ -19,16 +11,18 @@ class Test_prompt_display_name_modal(unittest.TestCase):
 
     def __init__(self, methodName = 'runTest'):
         # for common test functions (e.g. asserts)
-        self.test_helper = TestHelper(self, driver, display_name_input_id)
+        self.test_helper = TestHelper(self, "displayname-input", "input-modal")
+        
         return super().__init__(methodName)
-
+        
 
     # tests that the page has loaded and its title 
     def test_display_name_modal_step1_title(self):
-        
+        driver = self.test_helper.driver
+        # test first with "no" displayName saved
+        driver.execute_script("window.localStorage.setItem('displayName','');")
         driver.get("http://127.0.0.1:5000/")
         # clearing local storage
-        driver.execute_script("window.localStorage.setItem('displayName','');")
 
         self.assertEqual(driver.title, "Flack")
 
@@ -90,6 +84,7 @@ class Test_prompt_display_name_modal(unittest.TestCase):
     # input to the display name input field - uses
     def test_display_name_modal_step6_display_name_stored_and_prefilled(self):
         #reload page and get the text in the input field
+        driver = self.test_helper.driver
         driver.get("http://127.0.0.1:5000/")
         self.test_helper.assert_text_input_value("tirpák13")
         

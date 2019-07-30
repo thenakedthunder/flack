@@ -26,17 +26,8 @@ var newChannelCreationModal = (function () {
     });
 
     socket.on('new channel created', data => {
-        newChannelModal.classList.replace("fade-in", "fade-out");
-        newChannelModal.setAttribute("aria-hidden", "true");
-        setTimeout(() => { newChannelModal.classList.remove("fade-out"); },
-            750);
-
-        var newChannelNode = document.createElement("DIV");
-        var newChannelNamePar = document.createElement("P");
-        newChannelNamePar.innerHTML = `${data.channelName}`;
-
-        newChannelNode.appendChild(newChannelNamePar);
-        document.querySelector("#channels").appendChild(newChannelNode);
+        hideDialog("#new-channel-modal", "fade-out", "fade-in")
+        _addNewChannelToChannelList(data);
     });
 
 
@@ -59,6 +50,23 @@ var newChannelCreationModal = (function () {
         }
     }
 
+    // Appends new channel to the list and displays is
+    function _addNewChannelToChannelList(data) {
+        var newChannelNamePar = document.createElement("P");
+        newChannelNamePar.innerHTML = `${data.channelName}`;
+        var newChannelNode = document.createElement("DIV");
+        newChannelNode.appendChild(newChannelNamePar);
+
+        channels = document.querySelector("#channels")
+        // id needed for opening the channel later
+        newChannelNode.id = "channels-" + channels.childElementCount;
+        newChannelNode.classList.add("pointer-on-hover")
+        addOnClickEventListenerToChannelNameText(newChannelNode,
+            data.channelName);
+        channels.appendChild(newChannelNode);
+    }
+
+
     /* =================== public methods ================== */
 
     // Displays the channel creation modal
@@ -66,7 +74,9 @@ var newChannelCreationModal = (function () {
         document.querySelector("#add-new-channel-surface").onclick = () => {
             newChannelModal = document.querySelector("#new-channel-modal");
 
-            newChannelModal.classList.add("fade-in");
+            // if it's not the first time this is clicked
+            newChannelModal.classList.remove("d-none", "fade-out")
+            newChannelModal.classList.add("fade-in");   //adding animation
             newChannelModal.setAttribute("aria-hidden", "false");
 
             // Clear text input if it was filled in before
@@ -85,3 +95,4 @@ var newChannelCreationModal = (function () {
     };
 
 }());
+

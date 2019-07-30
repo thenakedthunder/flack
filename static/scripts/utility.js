@@ -87,3 +87,24 @@ function showErrorMessage(placeOfErrorMessage, errorMessage) {
     // event: hide error message when new input is being typed
     _removeErrorMessageWhenNeeded(textInput, placeOfErrorMessage);
 }
+
+// Hides the dialog provided by id name
+function hideDialog(modalId, classToAdd, classToReplace) {
+    const dialog = document.querySelector(modalId);
+    dialog.classList.add(classToAdd);
+    dialog.setAttribute("aria-hidden", "true");
+
+    // in order to not disturb the layout of other elements on page
+    // (classToReplace: selector used for the animation when modal comes in)
+    setTimeout(() => {
+        dialog.classList.replace(classToReplace, "d-none");
+    }, 750);
+}
+
+// will open new channel view
+function addOnClickEventListenerToChannelNameText(newChannelNode, name) {
+    newChannelNode.onclick = () => {
+        document.querySelector("#channel-name").innerHTML = name;
+    }
+}
+

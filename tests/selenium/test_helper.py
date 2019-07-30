@@ -5,25 +5,27 @@ import time
 from unittest import TestCase
 
 from selenium.common.exceptions import NoSuchElementException
-
-#class HelperData(object):
-
+from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 class TestHelper(object):
+    driver = webdriver.Chrome(ChromeDriverManager().install())
+    driver.get("http://127.0.0.1:5000/")
     
     
-    def __init__(self, test_case, driver, element_id=None):
+    def __init__(self, test_case, input_id=None, modal_id=None):
         self.test_case = test_case
-        self.driver = driver
-        self.element_id = element_id
+        self.input_id = input_id
+        self.modal_id = modal_id
 
 
-    # the displayname is saved from the previous session. If there was
-    # none stored, there shouldn't be any name pre-filled in input
     def assert_text_input_value(self, expected_value):
-        text_in_input = self.driver.find_element_by_id(
-            self.element_id).get_attribute('value')
+        """ the displayname is saved from the previous session. If there was
+            none stored, there shouldn't be any name pre-filled in input
+        """
+        text_in_input = TestHelper.driver.find_element_by_id(
+            self.input_id).get_attribute('value')
         self.test_case.assertEqual(text_in_input, expected_value)
 
     def submit_value(self, input_value, btn_id):
@@ -32,19 +34,20 @@ class TestHelper(object):
 
         # clicks the "Use this name" button
         time.sleep(1)           # otherwise the button is not always found
-        btn = self.driver.find_element_by_id(btn_id)
+        btn = TestHelper.driver.find_element_by_id(btn_id)
         btn.click()
     
     def input_new_value(self, input_value):
-        input_field = self.driver.find_element_by_id(self.element_id)
+        input_field = TestHelper.driver.find_element_by_id(self.input_id)
         input_field.clear()
         input_field.send_keys(input_value)
 
     def check_error_feedback(self, error_message):
-        # checks if the error message is displayed and if it is correct
-        # - for that, we need the error message right below the input field
-        error_message_selector = "#" + self.element_id + " + .error-message"
-        error_message_div = self.driver.find_element_by_css_selector(
+        """ checks if the error message is displayed and if it is correct
+            for that, we need the error message right below the input field
+        """
+        error_message_selector = "#" + self.input_id + " + .error-message"
+        error_message_div = TestHelper.driver.find_element_by_css_selector(
             error_message_selector)
 
         self.test_case.assertEqual(error_message_div.text, error_message)
@@ -58,30 +61,34 @@ class TestHelper(object):
         # and the input field should have a red border
         self.check_border_color_of_textinput("rgb(220, 53, 69)")
 
-    # asserts that no error message is displayed
     def assert_that_no_error_message_is_displayed(self):
+        """ asserts that no error message is displayed
+        """
         with self.test_case.assertRaises(NoSuchElementException):
-            self.driver.find_element_by_class_name("error-message")
+            TestHelper.driver.find_element_by_class_name("error-message")
 
         # border color of text input should be normal (not red)
         self.check_border_color_of_textinput("rgb(0, 0, 0)")
     
     def check_border_color_of_textinput(self, expected_color):
-        display_name_input_field = self.driver.find_element_by_id(
-            self.element_id)
+        display_name_input_field = TestHelper.driver.find_element_by_id(
+            self.input_id)
         text_input_border = display_name_input_field.value_of_css_property(
             "border-color")
         self.test_case.assertEqual(text_input_border, expected_color)
 
-    # asserts that modal is visible
     def assert_that_input_modal_is_visible(self, expected):
+        """ asserts that modal is visible
+        """
         time.sleep(3)
-        self.test_case.assertEqual(self.driver.find_element_by_id(
-            self.element_id).is_displayed(), expected)
+        self.test_case.assertEqual(TestHelper.driver.find_element_by_id(
+            self.modal_id).is_displayed(), expected)
 
-    # the channel creation modal is opened when "Add new channel" is clicked
     def click_on_add_new_channel(self):
-        new_channel_link = self.driver.find_element_by_id(
+        """ the channel creation modal is opened when "Add new channel" is 
+            clicked
+        """
+        new_channel_link = TestHelper.driver.find_element_by_id(
             "add-new-channel-surface")
         new_channel_link.click()
         
@@ -89,12 +96,31 @@ class TestHelper(object):
         # the text input should always be empty upon the modal opening
         self.assert_text_input_value("")
     
+
     @staticmethod
-    def setup_with_new_displayname(driver):
-        input_field = driver.find_element_by_id("displayname-input")
-        input_field.send_keys("Özséb")
+    def setup_with_new_displayname():
+        """ Sets the application up for tests. 'execute_script' functions had
+            to be called as a workaround because issues with the webdriver ones
+        """
+        TestHelper.driver.execute_script(
+            "document.querySelector('#displayname-input').value = 'gecó'")
         
         # clicks the "Use this name" button
         time.sleep(1)           # otherwise the button is not always found
-        btn = driver.find_element_by_id("display-name-ok-btn")
-        btn.click()
+        TestHelper.driver.execute_script(
+            "document.querySelector('#display-name-ok-btn').click()")
+
+    @staticmethod
+    def create_new_channel(channel_name):
+        new_channel_link = TestHelper.driver.find_element_by_id(
+            "add-new-channel-surface")
+        new_channel_link.click()
+        
+        input_field = TestHelper.driver.find_element_by_id("new-channel-input")
+        input_field.send_keys(channel_name)
+        
+        time.sleep(1)           # otherwise the button is not always found
+        # a workaround again, because of the "special" way webhelper functions
+        # are working
+        TestHelper.driver.execute_script(
+            "document.querySelector('#create-channel-btn').click()")

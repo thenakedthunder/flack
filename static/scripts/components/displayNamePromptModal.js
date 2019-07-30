@@ -10,21 +10,6 @@ var displayNamePromptModal = (function () {
     let displayName = localStorage.getItem("displayName");
 
 
-    /* =================== private methods ================= */
-
-    function hideDialog() {
-        // Hide the dialog
-        const dialog = document.querySelector("#input-modal");
-        dialog.classList.add("hide");
-        dialog.setAttribute("aria-hidden", "true");
-
-        // in order to not disturb the layout of other elements on page
-        setTimeout(() => {
-            dialog.classList.replace("bounce-fade", "d-none");
-        }, 500);
-    }
-
-
     /* =================== public methods ================== */
 
     // Load current value of displayName, if stored from previous session
@@ -50,7 +35,7 @@ var displayNamePromptModal = (function () {
 
             // Overwrite the display name currently saved in local storage
             localStorage.setItem("displayName", displayNameChosen);
-            hideDialog();
+            hideDialog("#input-modal", "hide", "bounce-fade");
         }
     }
 
