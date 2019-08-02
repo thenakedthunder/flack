@@ -45,8 +45,10 @@ var newChannelCreationModal = (function () {
             if (!validateInputs(newChannelName, placeOfErrorMessage))
                 return;
 
-            socket.emit('channel creation',
-                { 'newChannelName': newChannelName });
+            socket.emit('channel creation', {
+                'newChannelName': newChannelName,
+                'display_name_of_creator': localStorage.getItem("displayName")
+                });
         }
     }
 
