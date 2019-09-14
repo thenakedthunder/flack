@@ -1,0 +1,61 @@
+.bounce-fade {
+    animation-name: bounce-fade;
+    animation-duration: 0.75s;
+    animation-fill-mode: forwards;
+    animation-timing-function: cubic-bezier(0.6, 0.1, 0.8, 0.6);
+}
+
+/* Fade-in animation */
+@keyframes bounce-fade {
+    30% {
+        display: block;
+        opacity: 0.5;
+        padding-top: 160px; /* Location of the box */
+    }
+
+    50% {
+        opacity: 1;
+        padding-top: 80px; /* Location of the box */
+    }
+
+    80% {
+        opacity: 1;
+        padding-top: 160px; /* Location of the box */
+    }
+
+    90% {
+        padding-top: 140px; /* Location of the box */
+    }
+
+    94% {
+        padding-top: 160px; /* Location of the box */
+    }
+
+    97% {
+        padding-top: 150px; /* Location of the box */
+    }
+
+    100% {
+        opacity: 1;
+        padding-top: 160px; /* Location of the box */
+    }
+}
+
+/* Fade-out animation */
+.hide {
+    animation-name: hide;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes hide {
+    0% {
+        opacity: 1;
+        padding-top: 160px; /* Location of the box */
+    }
+
+    100% {
+        opacity: 0;
+        padding-top: -330px;
+    }
+}

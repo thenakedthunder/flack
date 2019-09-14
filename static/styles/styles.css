@@ -1,4 +1,8 @@
-﻿/*dialog: visible state*/
+﻿html, body {
+    height: 100%;
+}
+
+/*dialog: visible state*/
 .modal {
     display: block; /* Hidden by default */
     opacity: 0;
@@ -142,3 +146,8 @@
     cursor: pointer;
 }
 
+.bottom-aligned {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
