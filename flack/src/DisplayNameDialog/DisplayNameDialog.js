@@ -20,6 +20,10 @@ import './DisplayNameDialog.css';
 
 export default function DisplayNameDialog() {
 
+    // ------------------- CONSTANTS --------------------
+
+    const DISPLAYNAME_INPUT_DEFAULT_LABEL = "Your Display Name";
+
     // ---------------- STATE VARIABLES -----------------
 
     // this modal comes up right when the app is loaded
@@ -30,6 +34,12 @@ export default function DisplayNameDialog() {
         React.useState(localStorage.getItem("displayName"));
     const [isBtnDisabled, setIsBtnDisabled] =       // for the submit button
         React.useState(displayName ? false : true)
+
+    // for error handling (text changed to error message if needed)
+    const [labelOfTextField, setLabelOfTextField] =
+        React.useState(DISPLAYNAME_INPUT_DEFAULT_LABEL);
+    const [errorShown, setErrorShown] = React.useState(false);
+
 
 
     // --------------- HANDLER FUNCTIONS ----------------
@@ -46,20 +56,43 @@ export default function DisplayNameDialog() {
     const handleChange = event => {
         const newInput = event.target.value;
 
-        validate(newInput);
-
         setDisplayName(newInput);
-
         // displayName could not be used here, most likely because setting the 
         // state works asynchronously
-        setIsBtnDisabled(newInput ? false : true);
+        const inputValid = isInputValid(newInput)
+        setErrorShown(!inputValid);
+
+        setIsBtnDisabled(inputValid ? false : true);
     }
+
 
     // ---------------- HELPER FUNCTIONS ----------------
 
     const hideDialogWithAnimation = () => {
         const dialog = document.querySelector(".bounce-fade");
         dialog.classList.add("hide");
+    }
+
+    const isInputValid = input => {
+        const errorMessageWasShown = showErrorMessageIfNeeded(input);            
+        return errorMessageWasShown ? false : true;
+    }
+
+    const showErrorMessageIfNeeded = input => {
+        if (input.charAt(0) === " " ||
+            input.charAt(input.length - 1) === " ") {
+            setLabelOfTextField(
+                "The name cannot start or end with whitespaces.");
+            return true;
+        }
+
+        if (!input.trim()) {
+            setLabelOfTextField("Please provide a display name.");
+            return true;
+        }
+
+        setLabelOfTextField(DISPLAYNAME_INPUT_DEFAULT_LABEL);
+        return false;
     }
 
 
@@ -80,10 +113,11 @@ export default function DisplayNameDialog() {
                         onChange={handleChange}
                         value={displayName}
                         margin="dense"
-                        id="display-name"
-                        label="Display Name"
+                        id="displayname-input"
+                        label={labelOfTextField}
                         type="text"
                         fullWidth
+                        error={errorShown}
                     />
                 </DialogContent>
                 <DialogActions>
