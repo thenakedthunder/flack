@@ -17,22 +17,26 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import './DisplayNameDialog.css';
 
 
-
 export default function DisplayNameDialog() {
 
     // ------------------- CONSTANTS --------------------
 
+    const DISPLAY_NAME = "displayName";
     const DISPLAYNAME_INPUT_DEFAULT_LABEL = "Your Display Name";
 
     // ---------------- STATE VARIABLES -----------------
 
     // this modal comes up right when the app is loaded
     const [open, setOpen] = React.useState(true);
+
     // check if a display name is cached from the previous session and offer it
     // as a displayname for the user by autofilling it in the form
     const [displayName, setDisplayName] =
-        React.useState(localStorage.getItem("displayName"));
-    const [isBtnDisabled, setIsBtnDisabled] =       // for the submit button
+        React.useState(localStorage.getItem(DISPLAY_NAME));
+
+    // if no displayname is prefilled, text input is empty, user should not
+    // be able to submit => submit button disabled
+    const [isBtnDisabled, setIsBtnDisabled] =
         React.useState(displayName ? false : true)
 
     // for error handling (text changed to error message if needed)
@@ -44,8 +48,18 @@ export default function DisplayNameDialog() {
 
     // --------------- HANDLER FUNCTIONS ----------------
 
+    const handleChange = event => {
+        const newInput = event.target.value;
+        setDisplayName(newInput);       // keep the text input updated
+        validate(newInput);
+    }
+
     const handleClose = event => {
-        localStorage.setItem("displayName", displayName);
+        if (!DISPLAY_NAME)
+            throw Error("Unexpected error: empty string provided as " +
+                "displayname");
+
+        localStorage.setItem(DISPLAY_NAME, displayName);
         hideDialogWithAnimation();
 
         setTimeout(() => {
@@ -53,30 +67,16 @@ export default function DisplayNameDialog() {
         }, 750);            // this gives time for the animation to end
     }
 
-    const handleChange = event => {
-        const newInput = event.target.value;
-
-        setDisplayName(newInput);
-        // displayName could not be used here, most likely because setting the 
-        // state works asynchronously
-        const inputValid = isInputValid(newInput)
-        setErrorShown(!inputValid);
-
-        setIsBtnDisabled(inputValid ? false : true);
-    }
-
 
     // ---------------- HELPER FUNCTIONS ----------------
 
-    const hideDialogWithAnimation = () => {
-        const dialog = document.querySelector(".bounce-fade");
-        dialog.classList.add("hide");
+    const validate = newInput => {
+        const isInputInvalid = showErrorMessageIfNeeded(newInput);
+
+        setErrorShown(isInputInvalid);
+        setIsBtnDisabled(isInputInvalid);
     }
 
-    const isInputValid = input => {
-        const errorMessageWasShown = showErrorMessageIfNeeded(input);            
-        return errorMessageWasShown ? false : true;
-    }
 
     const showErrorMessageIfNeeded = input => {
         if (input.charAt(0) === " " ||
@@ -86,13 +86,18 @@ export default function DisplayNameDialog() {
             return true;
         }
 
-        if (!input.trim()) {
+        if (!input) {
             setLabelOfTextField("Please provide a display name.");
             return true;
         }
 
         setLabelOfTextField(DISPLAYNAME_INPUT_DEFAULT_LABEL);
         return false;
+    }
+
+    const hideDialogWithAnimation = () => {
+        const dialog = document.querySelector(".bounce-fade");
+        dialog.classList.add("hide");
     }
 
 
@@ -105,7 +110,7 @@ export default function DisplayNameDialog() {
                 <DialogTitle id="form-dialog-title">Welcome to Flack!</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        To get connected with others, you will first need a display name 
+                        To get connected with others, you will first need a display name
                         that others can see to know who they are talking to.
                     </DialogContentText>
                     <TextField
@@ -122,8 +127,8 @@ export default function DisplayNameDialog() {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}
-                            color="primary" 
-                            disabled={isBtnDisabled} >
+                        color="primary"
+                        disabled={isBtnDisabled} >
                         Proceed with this name
                     </Button>
                 </DialogActions>
