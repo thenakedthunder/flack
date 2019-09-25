@@ -64,7 +64,7 @@ export default function DisplayNameDialog() {
 
         setTimeout(() => {
             setOpen(false);
-        }, 750);            // this gives time for the animation to end
+        }, 750);            // gives time for the animation to end
     }
 
 
@@ -105,7 +105,11 @@ export default function DisplayNameDialog() {
 
     return (
         <div>
-            <Dialog open={open} onClose={handleClose} className="bounce-fade"
+            <Dialog
+                id="displayname-input-dialog"
+                className="bounce-fade"
+                open={open}
+                onClose={handleClose}
                 aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">Welcome to Flack!</DialogTitle>
                 <DialogContent>
@@ -126,7 +130,9 @@ export default function DisplayNameDialog() {
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}
+                    <Button
+                        id="display-name-ok-btn" 
+                        onClick={handleClose}
                         color="primary"
                         disabled={isBtnDisabled} >
                         Proceed with this name
