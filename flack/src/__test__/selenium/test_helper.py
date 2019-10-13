@@ -84,6 +84,39 @@ class TestHelper(object):
         with self.test_case.assertRaises(NoSuchElementException):
             TestHelper.driver.find_element_by_id(self.dialog_id)
 
+    def click_on_add_new_channel(self):
+        """ the channel creation modal is opened when "Add new channel" is 
+            clicked
+        """
+        new_channel_link = TestHelper.driver.find_element_by_id(
+            "add-new-channel-surface")
+        new_channel_link.click()
+        
+        self.assert_that_input_modal_is_visible(True)
+        # the text input should always be empty upon the modal opening
+        self.assert_text_input_value("")
+
+    def check_if_an_error_is_found(self, is_error_expected, 
+                                 input_label_value_expected):
+        self.assert_error_feedback_given(is_error_expected, 
+            input_label_value_expected) 
+        self.is_btn_disabled(is_error_expected)
+
+    # ---------- STATIC METHODS ----------
+
+    @staticmethod
+    def setup_with_new_displayname():
+        """ Sets the application up for tests. 'execute_script' functions had
+            to be called as a workaround because issues with the webdriver ones
+        """
+        TestHelper.driver.execute_script(
+            "document.querySelector('#displayname-input').value = 'gecó'")
+        
+        # clicks the "Use this name" button
+        time.sleep(1)           # otherwise the button is not always found
+        TestHelper.driver.execute_script(
+            "document.querySelector('#display-name-ok-btn').click()")
+
     #def assert_that_no_error_message_is_displayed(self):
     #    with self.test_case.assertRaises(NoSuchElementException):
     #        TestHelper.driver.find_element_by_class_name("error-message")
@@ -113,18 +146,7 @@ class TestHelper(object):
     #    self.assert_text_input_value("")
     
 
-    #@staticmethod
-    #def setup_with_new_displayname():
-    #    """ Sets the application up for tests. 'execute_script' functions had
-    #        to be called as a workaround because issues with the webdriver ones
-    #    """
-    #    TestHelper.driver.execute_script(
-    #        "document.querySelector('#displayname-input').value = 'gecó'")
-        
-    #    # clicks the "Use this name" button
-    #    time.sleep(1)           # otherwise the button is not always found
-    #    TestHelper.driver.execute_script(
-    #        "document.querySelector('#display-name-ok-btn').click()")
+
 
     #@staticmethod
     #def create_new_channel(channel_name):
