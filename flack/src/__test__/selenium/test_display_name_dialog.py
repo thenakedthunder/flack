@@ -39,7 +39,7 @@ class Test_display_name_dialog(unittest.TestCase):
 
         # assert animation
         dialog = self.driver.find_element_by_id(self.test_helper.dialog_id)
-        self.assertTrue("bounce-fade" in dialog.get_attribute("class"))
+        self.test_helper.assert_animation_is_correct(dialog, "bounce-fade")
 
     def test_display_name_dialog_step2_input_change_handling(self):
         """ tests that input change is handled well
@@ -47,7 +47,7 @@ class Test_display_name_dialog(unittest.TestCase):
         # since there was no display name stored in local storage, text input
         # should be empty and button disabled
         self.test_helper.assert_text_input_value("")
-        self.test_helper.is_btn_disabled(True)
+        self.test_helper.is_btn_disabled(True, ".submit-btn")
 
         # this is needed because this field is a controlled element
         self.test_helper.input_new_value("Topper Harley")
@@ -123,7 +123,7 @@ class Test_display_name_dialog(unittest.TestCase):
 
         self.test_helper.submit_value("tirpák13", "display-name-ok-btn")
         time.sleep(1)
-        self.test_helper.assert_that_dialog_is_not_visible()
+        self.test_helper.assert_that_dialog_is_visible(False)
 
     def test_display_name_dialog_step9_input_prefilled_with_displayname(self):
         """ the display name should be cached if there was one submitted in a

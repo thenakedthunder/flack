@@ -2,7 +2,6 @@
 
 // react components
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 import NewChannelDialog from '../NewChannelDialog/NewChannelDialog.js'; 
 
@@ -22,37 +21,40 @@ import Drawer from '@material-ui/core/Drawer';
 import AddIcon from '@material-ui/icons/Add';
 
 // styling
-import './ChanelListPanel.css';
+import './ChannelListPanel.css';
 
 
-export default function ChanelListPanel() {
+export default function ChannelListPanel() {
+
+    // ---------------- STATE VARIABLES -----------------
+
+    //drawer's visibility on small screens
     const [mobileOpen, setMobileOpen] = React.useState(false);
+
     const [displayNewChannelDialog,
         setDisplayNewChannelDialog] = React.useState(false);
-    console.log(displayNewChannelDialog);
+
+
+    // --------------- HANDLER FUNCTIONS ----------------
 
     const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
 
-    const setDisplayNewChannelDialogCallback =
-        () => {
-            setDisplayNewChannelDialog(false)
-        }
 
+    // ---------------- DRAWER COMPONENT ----------------
 
     const drawer = (
         <div id="drawer">
             <List>
                 <ListItem button onClick={() => setDisplayNewChannelDialog(true)}>
                     <ListItemIcon><AddIcon /></ListItemIcon>
-                    <ListItemText primary="Add a new channel" />
+                    <ListItemText id="add-new-channel-btn" primary="Add a new channel" />
                 </ListItem>
             </List>
             <Divider />
         </div>
     );
 
-
-
+    
     // -------------- RENDERING COMPONENT ---------------
 
     return (
@@ -92,8 +94,9 @@ export default function ChanelListPanel() {
                 </Hidden>
             </nav>
             {displayNewChannelDialog &&
-                <NewChannelDialog parentCallback={setDisplayNewChannelDialogCallback} />
-                }
+                <NewChannelDialog
+                closeDialogCallback={() => setDisplayNewChannelDialog(false)} />
+            }
         </div>
     );
 

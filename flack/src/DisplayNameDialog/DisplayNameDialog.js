@@ -26,7 +26,7 @@ export default function DisplayNameDialog() {
 
     // --------------- HANDLER FUNCTIONS ----------------
 
-    const handleClose = (displayName) => {
+    const handleClose = displayName => {
         if (!displayName)
             throw Error("Unexpected error: empty string provided as " +
                 "displayname");

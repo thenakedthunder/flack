@@ -102,11 +102,19 @@ export default function FlackDialog(props) {
             <DialogActions>
                 <Button
                     id={props.submitButtonId}
+                    className="submit-btn"
                     onClick={() => props.handleCloseCallback(nameInputText)}
                     color="primary"
                     disabled={isBtnDisabled} >
                     Proceed with this name
                 </Button>
+                {props.hasCancelBtn &&
+                    <Button
+                        className="cancel-btn"
+                        onClick={() => props.cancelBtnOnClickCallBack()}>
+                        Cancel
+                    </Button>
+                }
             </DialogActions>
         </Dialog>
     );

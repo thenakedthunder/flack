@@ -11,7 +11,7 @@ from selenium.webdriver.common.keys import Keys
 
 # --------------- "CONSTANTS" --------------- #
 
-CHANNEL_NAME_INPUT_DEFAULT_LABEL = "Your Channel Name"
+CHANNEL_NAME_INPUT_DEFAULT_LABEL = "Channel Name"
 WHITESPACE_AT_START_OR_END_ERROR_MESSAGE = "The name cannot start or end with whitespaces."
 NO_STRING_PROVIDED_ERROR_MESSAGE = "Please provide a channel name."
 
@@ -29,15 +29,23 @@ class Test_new_channel_name_dialog(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """ Get the display name prompt out of the way 
-            (it is tested in another class)
+            (it is tested in another test class)
         """
         TestHelper.setup_with_new_displayname()
+        time.sleep(3)
 
 
 # ------------- NEW CHANNEL NAME DIALOG TESTS -------------- #
 
     def test_new_channel_dialog_step1_dialog_displayed(self):
+        """ tests that the "Add new channel" button is working
+        """
         self.test_helper.click_on_add_new_channel()
+        self.test_helper.assert_that_dialog_is_visible()
+
+        dialog = self.driver.find_element_by_id(self.test_helper.dialog_id)
+        self.test_helper.assert_animation_is_correct(dialog, "fade-in")
+
 
     def test_new_channel_dialog_step2_input_change_handling(self):
         """ tests that input change is handled well
@@ -119,23 +127,23 @@ class Test_new_channel_name_dialog(unittest.TestCase):
 
         self.test_helper.submit_value("Channel One", "channel-name-ok-btn")
         dialog = self.driver.find_element_by_id(self.test_helper.dialog_id)
-        # assert animation
-        self.assertTrue("hide" in dialog.get_attribute("class"))
+        self.test_helper.assert_animation_is_correct(dialog, "fade-out")
 
-        time.sleep(1)
-        self.test_helper.assert_that_dialog_is_not_visible()
+        time.sleep(1)       # so the animation is ended, the dialog is hidden
+        self.test_helper.assert_that_dialog_is_visible(False)
 
-    def test_display_name_dialog_step9_input_prefilled_with_displayname(self):
-        """ the display name should be cached if there was one submitted in a
-            previous session. This stored value has to be filled in as a 
-            display name suggested for the user.
+    def test_new_channel_name_dialog_step9_cancel(self):
+        """ this dialog has a cancel button that should close the dialog
+            (with no animation)
         """
-        display_name_stored = self.driver.execute_script(
-            "return window.localStorage.getItem('displayName');")
-        self.assertEqual(display_name_stored, "tirpák13")
+        self.test_helper.test_cancel_btn_with_input("")
+        self.test_helper.test_cancel_btn_with_input("channel_name")
+        self.test_helper.test_cancel_btn_with_input(
+            " channel_name_starting_with_whitespace")
 
-        self.driver.get("http://127.0.0.1:5000/")       # refresh page
-        self.test_helper.assert_text_input_value(display_name_stored)
+
+    #def test test_new_channel_name_dialog_step10
+    #def test test_new_channel_name_dialog_step11
 
 
 

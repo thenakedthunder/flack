@@ -1,0 +1,36 @@
+/* fade-in animation */
+.fade-in {
+    animation-name: fade-in;
+    animation-duration: 0.75s;
+    animation-fill-mode: forwards;
+    animation-timing-function: linear;
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+
+/* fade-out animation */
+.fade-out {
+    animation-name: fade-out;
+    animation-duration: 0.75s;
+    animation-fill-mode: forwards;
+    animation-timing-function: linear;
+}
+
+@keyframes fade-out {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
