@@ -6,6 +6,7 @@ import unittest
 from test_helper import TestHelper
 
 from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import NoSuchElementException
 
 
 
@@ -14,6 +15,7 @@ from selenium.webdriver.common.keys import Keys
 CHANNEL_NAME_INPUT_DEFAULT_LABEL = "Channel Name"
 WHITESPACE_AT_START_OR_END_ERROR_MESSAGE = "The name cannot start or end with whitespaces."
 NO_STRING_PROVIDED_ERROR_MESSAGE = "Please provide a channel name."
+CHANNEL_NAME_TAKEN = "Sorry, this channel name is taken. Please select another one."
 
 
 class Test_new_channel_name_dialog(unittest.TestCase):
@@ -37,17 +39,16 @@ class Test_new_channel_name_dialog(unittest.TestCase):
 
 # ------------- NEW CHANNEL NAME DIALOG TESTS -------------- #
 
-    def test_new_channel_dialog_step1_dialog_displayed(self):
+    def test_new_channel_dialog_step_a_dialog_displayed(self):
         """ tests that the "Add new channel" button is working
         """
         self.test_helper.click_on_add_new_channel()
-        self.test_helper.assert_that_dialog_is_visible()
 
         dialog = self.driver.find_element_by_id(self.test_helper.dialog_id)
         self.test_helper.assert_animation_is_correct(dialog, "fade-in")
 
 
-    def test_new_channel_dialog_step2_input_change_handling(self):
+    def test_new_channel_dialog_step_b_input_change_handling(self):
         """ tests that input change is handled well
         """
         # this text input should be empty by default
@@ -58,7 +59,7 @@ class Test_new_channel_name_dialog(unittest.TestCase):
         time.sleep(1)
         self.test_helper.assert_text_input_value("Degecfalva")
 
-    def test_new_channel_dialog_step3_input_with_leading_whitespace(self):
+    def test_new_channel_dialog_step_c_input_with_leading_whitespace(self):
         """ string with leading whitespaces should not be accepted as a valid 
             channel name
         """
@@ -77,7 +78,7 @@ class Test_new_channel_name_dialog(unittest.TestCase):
         self.test_helper.check_if_an_error_is_found(True,
             WHITESPACE_AT_START_OR_END_ERROR_MESSAGE)
                 
-    def test_new_channel_dialog_step4_valid_input_after_error(self):
+    def test_new_channel_dialog_step_d_valid_input_after_error(self):
         """ when user starts to type a new input, the error message should 
             disappear (if there was one and IF the new input is valid)
         """
@@ -87,7 +88,7 @@ class Test_new_channel_name_dialog(unittest.TestCase):
         self.test_helper.check_if_an_error_is_found(False, 
                             CHANNEL_NAME_INPUT_DEFAULT_LABEL)
        
-    def test_new_channel_dialog_step5_input_with_trailing_whitespace(self):
+    def test_new_channel_dialog_step_e_input_with_trailing_whitespace(self):
         """ string with trailing whitespaces should not be accepted as a valid 
             channel name
         """
@@ -97,7 +98,7 @@ class Test_new_channel_name_dialog(unittest.TestCase):
         self.test_helper.check_if_an_error_is_found(True,
             WHITESPACE_AT_START_OR_END_ERROR_MESSAGE)
 
-    def test_new_channel_dialog_step6_delete_chars_to_test_with_valid_input(self):
+    def test_new_channel_dialog_step_f_delete_chars_to_test_with_valid_input(self):
         """ input should be valid again after deleting the trailing whitespace
         """
         text_field = self.driver.find_element_by_id(self.test_helper.input_id)
@@ -107,7 +108,7 @@ class Test_new_channel_name_dialog(unittest.TestCase):
         self.test_helper.check_if_an_error_is_found(False, 
                             CHANNEL_NAME_INPUT_DEFAULT_LABEL)
 
-    def test_new_channel_dialog_step7_input_with_empty_string(self):
+    def test_new_channel_dialog_step_g_input_with_empty_string(self):
         """ empty string should not be accepted as a valid channel name
         """
         self.test_helper.delete_text()      # clear text input
@@ -116,7 +117,7 @@ class Test_new_channel_name_dialog(unittest.TestCase):
         self.test_helper.check_if_an_error_is_found(True, 
                             NO_STRING_PROVIDED_ERROR_MESSAGE)
 
-    def test_new_channel_name_dialog_step8_submit(self):
+    def test_new_channel_dialog_step_h_submit(self):
         """ test again that valid input does not result in an error message,
             and then check the functioning of submitting
         """
@@ -125,14 +126,14 @@ class Test_new_channel_name_dialog(unittest.TestCase):
         self.test_helper.check_if_an_error_is_found(False, 
                             CHANNEL_NAME_INPUT_DEFAULT_LABEL)
 
-        self.test_helper.submit_value("Channel One", "channel-name-ok-btn")
+        self.test_helper.submit_value("Purpendicular", "channel-name-ok-btn")
         dialog = self.driver.find_element_by_id(self.test_helper.dialog_id)
         self.test_helper.assert_animation_is_correct(dialog, "fade-out")
 
         time.sleep(1)       # so the animation is ended, the dialog is hidden
         self.test_helper.assert_that_dialog_is_visible(False)
 
-    def test_new_channel_name_dialog_step9_cancel(self):
+    def test_new_channel_dialog_step_i_cancel(self):
         """ this dialog has a cancel button that should close the dialog
             (with no animation)
         """
@@ -141,10 +142,35 @@ class Test_new_channel_name_dialog(unittest.TestCase):
         self.test_helper.test_cancel_btn_with_input(
             " channel_name_starting_with_whitespace")
 
+    def test_new_channel_dialog_step_j_channel_creation(self):
+        """ tests the creation of new channels
+        """
+        new_element = self.driver.find_element_by_css_selector("#channel-1")
+        self.test_helper.test_case.assertEqual(new_element.text, 
+                                               "Purpendicular")
 
-    #def test test_new_channel_name_dialog_step10
-    #def test test_new_channel_name_dialog_step11
+        time.sleep(1)
+        self.test_helper.add_new_channel("Total A.band.on", 
+                                         "channel-name-ok-btn")
+        time.sleep(1)
+        new_element = self.driver.find_element_by_css_selector("#channel-2")
+        self.test_helper.test_case.assertEqual(new_element.text, 
+                                               "Total A.band.on")
 
+    def test_new_channel_dialog_step_k_channel_creation_with_an_already_used_name(self):
+        """ Negative test: it should not be possible to create a channel with
+            a name already used.
+        """
+        self.test_helper.add_new_channel("purpendicular", 
+                                         "channel-name-ok-btn")
+        time.sleep(1)
+        self.test_helper.check_if_an_error_is_found(True, CHANNEL_NAME_TAKEN)
+        
+        button = self.driver.find_element_by_class_name("cancel-btn")
+        button.click()
+        time.sleep(1)
+        with self.assertRaises(NoSuchElementException):
+            self.driver.find_element_by_css_selector("#channel-3")
 
 
 if __name__ == "__main__":

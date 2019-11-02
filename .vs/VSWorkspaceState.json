@@ -3,14 +3,14 @@
     "",
     "\\flack",
     "\\flack\\backend",
+    "\\flack\\public",
     "\\flack\\src",
     "\\flack\\src\\ChannelListPanel",
-    "\\flack\\src\\DisplayNameDialog",
-    "\\flack\\src\\FlackDialog",
     "\\flack\\src\\NewChannelDialog",
-    "\\flack\\src\\__test__",
-    "\\flack\\src\\__test__\\selenium"
+    "\\static",
+    "\\static\\scripts",
+    "\\templates"
   ],
-  "SelectedNode": "\\flack\\src\\__test__\\selenium\\test_display_name_dialog.py",
+  "SelectedNode": "\\flack\\backend\\application.py",
   "PreviewInSolutionExplorer": false
 }

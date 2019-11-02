@@ -1,9 +1,12 @@
+# ---------------- IMPORTS ----------------
 import os
 
 from flask import Flask, render_template
 from flask_socketio import SocketIO, emit
 from channel import Channel
 
+
+# ----------------- SETUP -----------------
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
@@ -12,9 +15,15 @@ socketio = SocketIO(app)
 channels = []
 
 
+# ---------------- ROUTES -----------------
+
+
 @app.route("/")
 def index():
     return render_template("index.html")
+
+
+# ---------------- EVENTS -----------------
 
 @socketio.on("channel creation")
 def create_channel(data):

@@ -24,11 +24,11 @@ export default function NewChannelDialog(props) {
             throw Error("Unexpected error: empty string provided as " +
                 "channel name");
 
-        hideDialogWithAnimation();
+        props.addNewChannelToListCallback(newChannelName);
 
-        setTimeout(() => {
-            closeDialog();
-        }, 750);            // gives time for the animation to end
+        hideDialogWithAnimation();
+        // gives time for the animation to end
+        setTimeout(() =>  closeDialog(), 750);            
     }
 
 
@@ -39,9 +39,7 @@ export default function NewChannelDialog(props) {
         dialog.classList.add("fade-out");
     }
 
-    const closeDialog = () => {
-        props.closeDialogCallback();
-    }
+    const closeDialog = () => props.closeDialogCallback();
 
     // -------------- RENDERING COMPONENT ---------------
 

@@ -23,24 +23,75 @@ import AddIcon from '@material-ui/icons/Add';
 // styling
 import './ChannelListPanel.css';
 
+// Socket IO
+const io = require('socket.io-client');
+const socket = io('http://127.0.0.1:5000');
+
+
 
 export default function ChannelListPanel() {
 
     // ---------------- STATE VARIABLES -----------------
 
-    //drawer's visibility on small screens
+    // drawer's visibility on small screens
     const [mobileOpen, setMobileOpen] = React.useState(false);
 
     const [displayNewChannelDialog,
         setDisplayNewChannelDialog] = React.useState(false);
 
+    // for holding channel names
+    const [channelList, changeChannelList] = React.useState([]);
+
+
+    // ------------ WEBSOCKET IMPLEMENTATION ------------
+
+    React.useEffect(() => {
+        socket.on('new channel created', payload => {
+            changeChannelList(payload.channels.map(item => item.channelName))
+        });
+    });
+
 
     // --------------- HANDLER FUNCTIONS ----------------
 
+    const handleChannelCreation = newChannelName => {
+        let request = new XMLHttpRequest()
+
+        // callback for server response
+        request.addEventListener('load', () => {
+            console.log(request.responseText)
+        })
+
+        request.open('POST', 'http://localhost:5000/channel_creation')
+        request.setRequestHeader("Content-Type", "application/json");
+        request.send(JSON.stringify({
+            'newChannelName': newChannelName,
+            'display_name_of_creator': localStorage.getItem('displayName')
+        }))
+    };
+
     const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
 
+    const openChannel = () => "TO DO"
 
     // ---------------- DRAWER COMPONENT ----------------
+
+    let counter = 0;
+
+    // rendering channels
+    const channelListItems = channelList.map((channel) => {
+        counter++;
+        return (
+            <ListItem
+                button
+                id={`channel-${counter}`}
+                key={`channel-${counter}`}
+                onClick={() => openChannel()}
+            >
+                <ListItemText primary={channel} />
+            </ListItem>
+        );
+    });
 
     const drawer = (
         <div id="drawer">
@@ -49,6 +100,7 @@ export default function ChannelListPanel() {
                     <ListItemIcon><AddIcon /></ListItemIcon>
                     <ListItemText id="add-new-channel-btn" primary="Add a new channel" />
                 </ListItem>
+                {channelListItems}
             </List>
             <Divider />
         </div>
@@ -95,7 +147,8 @@ export default function ChannelListPanel() {
             </nav>
             {displayNewChannelDialog &&
                 <NewChannelDialog
-                closeDialogCallback={() => setDisplayNewChannelDialog(false)} />
+                closeDialogCallback={() => setDisplayNewChannelDialog(false)}
+                addNewChannelToListCallback={handleChannelCreation} />
             }
         </div>
     );

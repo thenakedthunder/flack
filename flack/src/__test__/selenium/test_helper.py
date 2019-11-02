@@ -123,6 +123,10 @@ class TestHelper(object):
         button.click()
         self.assert_that_dialog_is_visible(False)
 
+    def add_new_channel(self, value_to_submit, btn_selector):
+        self.click_on_add_new_channel()
+        self.submit_value(value_to_submit, btn_selector)
+
 
     # ---------- STATIC METHODS ----------
 
@@ -142,48 +146,3 @@ class TestHelper(object):
         TestHelper.driver.execute_script(
             "document.querySelector('#display-name-ok-btn').click()")
 
-    #def assert_that_no_error_message_is_displayed(self):
-    #    with self.test_case.assertRaises(NoSuchElementException):
-    #        TestHelper.driver.find_element_by_class_name("error-message")
-
-    #    # border color of text input should be normal (not red)
-    #    self.check_border_color_of_textinput("rgb(0, 0, 0)")
-    
-    #def check_border_color_of_textinput(self, expected_color):
-    #    display_name_input_field = TestHelper.driver.find_element_by_id(
-    #        self.input_id)
-    #    text_input_border = display_name_input_field.value_of_css_property(
-    #        "border-color")
-    #    self.test_case.assertEqual(text_input_border, expected_color)
-
-
-
-    #def click_on_add_new_channel(self):
-    #    """ the channel creation modal is opened when "Add new channel" is 
-    #        clicked
-    #    """
-    #    new_channel_link = TestHelper.driver.find_element_by_id(
-    #        "add-new-channel-surface")
-    #    new_channel_link.click()
-        
-    #    self.assert_that_input_modal_is_visible(True)
-    #    # the text input should always be empty upon the modal opening
-    #    self.assert_text_input_value("")
-    
-
-
-
-    #@staticmethod
-    #def create_new_channel(channel_name):
-    #    new_channel_link = TestHelper.driver.find_element_by_id(
-    #        "add-new-channel-surface")
-    #    new_channel_link.click()
-        
-    #    input_field = TestHelper.driver.find_element_by_id("new-channel-input")
-    #    input_field.send_keys(channel_name)
-        
-    #    time.sleep(1)           # otherwise the button is not always found
-    #    # a workaround again, because of the "special" way webhelper functions
-    #    # are working
-    #    TestHelper.driver.execute_script(
-    #        "document.querySelector('#create-channel-btn').click()")
