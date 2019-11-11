@@ -1,3 +1,5 @@
+# ------------------- IMPORTS -------------------
+
 import os
 
 from flask import Flask, render_template, request
@@ -7,15 +9,18 @@ from flask_socketio import SocketIO, emit
 from channel import Channel
 
 
+# ------------------ APP SETUP ------------------
+
 app = Flask(__name__, static_folder="../build/static", template_folder="../build")
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
+
 # needed for CORS problems in React debug mode
 app.config['CORS_HEADERS'] = 'Content-Type'
-cors = CORS(app, resources={r"/channel_creation": {"origins": "http://localhost:port"}})
+cors = CORS(app, resources={r"/channel_creation": {"origins": "*"}})
 
 socketio = SocketIO(app)
 
-
+# for keeping track of existing channels
 channels = []
 
 
@@ -29,20 +34,15 @@ def index():
 @cross_origin(origin='localhost',headers=['Content- Type','Authorization'])
 def create_channel():
     data = request.json
-    channel_name = data["newChannelName"]
+    response = get_response_for_channel_creation_request(
+        data["newChannelName"])
     
-    if (is_channel_name_taken(channel_name)):
-        response = 'FAILED'
-    
-    else:
-        new_channel = Channel(channel_name, data["display_name_of_creator"])
-        channels.append(new_channel)
-    
+    if (response == 'SUCCESS'):
+        add_new_channel_to_channels_list(data)
+
         socketio.emit("new channel created", 
              {"channels": [channel.serialize() for channel in channels]}, 
              broadcast=True)
-
-        response = 'SUCCESS'
 
     return response
 
@@ -68,6 +68,17 @@ def is_channel_name_taken(channel_name):
         return True
 
     return False
+
+def get_response_for_channel_creation_request(channel_name):    
+    if (is_channel_name_taken(channel_name)):
+        return 'FAILED'
+    
+    return 'SUCCESS'
+
+def add_new_channel_to_channels_list(data):
+    new_channel = Channel(data["newChannelName"], 
+                          data["display_name_of_creator"])
+    channels.append(new_channel)
 
 #def get_channel_from(channel_name):
 #    """gets the channel with the given name from the channels list"""

@@ -41,6 +41,14 @@ export default function FlackDialog(props) {
         validate(newInput);
     }
 
+    const handleClose = () => {
+        let result = props.handleCloseCallback(nameInputText);
+        if (!result.success) {
+            setLabelOfTextField(result.errorMessage);
+            setErrorShown(true);
+            setIsBtnDisabled(true);
+        }
+    }
 
     // ---------------- HELPER FUNCTIONS ----------------
 
@@ -103,7 +111,7 @@ export default function FlackDialog(props) {
                 <Button
                     id={props.submitButtonId}
                     className="submit-btn"
-                    onClick={() => props.handleCloseCallback(nameInputText)}
+                    onClick={handleClose}
                     color="primary"
                     disabled={isBtnDisabled} >
                     Proceed with this name

@@ -58,13 +58,18 @@ class TestHelper(object):
 
         self.test_case.assertEqual(has_error_formatting, expected)
 
-        # then check if error message is provided and its error formatting
-        label_div = TestHelper.driver.find_element_by_css_selector(
-            ".MuiInputLabel-root")
-        has_error_formatting = "Mui-error" in label_div.get_attribute("class")
+        # then check if (and what) error message is provided and its formatting
+        try:
+            label_div = TestHelper.driver.find_element_by_css_selector(
+                ".MuiInputLabel-root")
+            self.test_case.assertEqual(label_div.text, label_text)
+            has_error_formatting = "Mui-error" in label_div.get_attribute(
+                "class")
+
+        except:         # this means no label was found
+            has_error_formatting = False;
 
         self.test_case.assertEqual(has_error_formatting, expected)
-        self.test_case.assertEqual(label_div.text, label_text)
 
     def is_btn_disabled(self, expected, selector):
         btn = TestHelper.driver.find_element_by_css_selector(selector)
@@ -135,7 +140,7 @@ class TestHelper(object):
         """ Sets the application up for tests. 'execute_script' functions had
             to be called as a workaround because issues with the webdriver ones
         """
-        time.sleep(3)
+        time.sleep(5)
         TestHelper.driver.execute_script(
             "document.querySelector('#displayname-input').value = 'gecó '")
         TestHelper.driver.find_element_by_id("displayname-input").send_keys(

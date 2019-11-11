@@ -54,22 +54,6 @@ export default function ChannelListPanel() {
 
     // --------------- HANDLER FUNCTIONS ----------------
 
-    const handleChannelCreation = newChannelName => {
-        let request = new XMLHttpRequest()
-
-        // callback for server response
-        request.addEventListener('load', () => {
-            console.log(request.responseText)
-        })
-
-        request.open('POST', 'http://localhost:5000/channel_creation')
-        request.setRequestHeader("Content-Type", "application/json");
-        request.send(JSON.stringify({
-            'newChannelName': newChannelName,
-            'display_name_of_creator': localStorage.getItem('displayName')
-        }))
-    };
-
     const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
 
     const openChannel = () => "TO DO"
@@ -147,8 +131,8 @@ export default function ChannelListPanel() {
             </nav>
             {displayNewChannelDialog &&
                 <NewChannelDialog
-                closeDialogCallback={() => setDisplayNewChannelDialog(false)}
-                addNewChannelToListCallback={handleChannelCreation} />
+                    closeDialogCallback={() => setDisplayNewChannelDialog(false)}
+                />
             }
         </div>
     );

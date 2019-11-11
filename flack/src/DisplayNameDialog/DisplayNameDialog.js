@@ -37,6 +37,8 @@ export default function DisplayNameDialog() {
         setTimeout(() => {
             setOpen(false);
         }, 750);            // this gives time for the animation to end
+
+        return { success: true }
     }
 
 

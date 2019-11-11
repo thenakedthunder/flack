@@ -6,11 +6,11 @@
     "\\flack\\public",
     "\\flack\\src",
     "\\flack\\src\\ChannelListPanel",
+    "\\flack\\src\\DisplayNameDialog",
+    "\\flack\\src\\FlackDialog",
     "\\flack\\src\\NewChannelDialog",
-    "\\static",
-    "\\static\\scripts",
-    "\\templates"
+    "\\flack\\src\\__test__"
   ],
-  "SelectedNode": "\\flack\\backend\\application.py",
+  "SelectedNode": "\\flack\\src\\NewChannelDialog\\NewChannelDialog.js",
   "PreviewInSolutionExplorer": false
 }

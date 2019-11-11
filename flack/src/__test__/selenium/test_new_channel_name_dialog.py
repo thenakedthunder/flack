@@ -15,7 +15,7 @@ from selenium.common.exceptions import NoSuchElementException
 CHANNEL_NAME_INPUT_DEFAULT_LABEL = "Channel Name"
 WHITESPACE_AT_START_OR_END_ERROR_MESSAGE = "The name cannot start or end with whitespaces."
 NO_STRING_PROVIDED_ERROR_MESSAGE = "Please provide a channel name."
-CHANNEL_NAME_TAKEN = "Sorry, this channel name is taken. Please select another one."
+CHANNEL_NAME_TAKEN = "Sorry, this name is already used. Please choose another one."
 
 
 class Test_new_channel_name_dialog(unittest.TestCase):
@@ -31,7 +31,7 @@ class Test_new_channel_name_dialog(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """ Get the display name prompt out of the way 
-            (it is tested in another test class)
+            (it is tested in test_display_name_dialog.py)
         """
         TestHelper.setup_with_new_displayname()
         time.sleep(3)
@@ -161,6 +161,7 @@ class Test_new_channel_name_dialog(unittest.TestCase):
         """ Negative test: it should not be possible to create a channel with
             a name already used.
         """
+        time.sleep(1)
         self.test_helper.add_new_channel("purpendicular", 
                                          "channel-name-ok-btn")
         time.sleep(1)
