@@ -15,8 +15,8 @@ export default function DisplayNameDialog() {
 
     const DISPLAY_NAME = "displayName";
     const DISPLAYNAME_INPUT_DEFAULT_LABEL = "Your Display Name";
-    const DIALOG_INSTRUCTION_TEXT = `To get connected with others, you will 
-        first need to choose a display name that others can see and call you.`
+    const DIALOG_INSTRUCTION_TEXT =
+        "To get connected with others, you will first need to choose a display name that others can see and call you."
 
 
     // ---------------- STATE VARIABLES -----------------
@@ -26,7 +26,7 @@ export default function DisplayNameDialog() {
 
     // --------------- HANDLER FUNCTIONS ----------------
 
-    const handleClose = displayName => {
+    const handleClose = (displayName: string) => {
         if (!displayName)
             throw Error("Unexpected error: empty string provided as " +
                 "displayname");
@@ -46,11 +46,15 @@ export default function DisplayNameDialog() {
 
     const hideDialogWithAnimation = () => {
         const dialog = document.querySelector("#displayname-input-dialog");
+        if (dialog == null) {
+            throw Error("Unexpected error: dialog element not found")
+        }
+
         dialog.classList.add("hide");
     }
 
-    let getDisplayNameFromLocalStorage = () => {
-        let displayName = localStorage.getItem(DISPLAY_NAME);
+    const getDisplayNameFromLocalStorage = () => {
+        const displayName = localStorage.getItem(DISPLAY_NAME);
 
         return displayName ? displayName : ""
     }
@@ -63,13 +67,14 @@ export default function DisplayNameDialog() {
             dialogId="displayname-input-dialog"
             classNameForAnimation="bounce-fade"
             isOpen={open}
-            nameInputText={getDisplayNameFromLocalStorage}
+            nameInputText={getDisplayNameFromLocalStorage()}
             handleCloseCallback={handleClose}
             nameType="display"
             nameInputDefaultLabel={DISPLAYNAME_INPUT_DEFAULT_LABEL}
             contentText={DIALOG_INSTRUCTION_TEXT}
             inputId="displayname-input"
             submitButtonId="display-name-ok-btn"
+            hasCancelBtn={false}
         />
     );
 }

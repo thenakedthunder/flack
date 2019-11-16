@@ -8,7 +8,9 @@ import './NewChannelDialog.css';
 
 import FlackDialog from '../FlackDialog/FlackDialog.js';
 
-export default function NewChannelDialog(props) {
+export default function NewChannelDialog(props: {
+    closeDialogCallback: () => void;
+}) {
 
     // ------------------- CONSTANTS --------------------
 
@@ -21,7 +23,7 @@ export default function NewChannelDialog(props) {
 
     // --------------- HANDLER FUNCTIONS ----------------
 
-    const handleClose = newChannelName => {
+    const handleClose = (newChannelName: string) => {
         if (!newChannelName)
             throw Error("Unexpected error: empty string provided as " +
                 "channel name");
@@ -37,7 +39,7 @@ export default function NewChannelDialog(props) {
         return { success: true }
     }
 
-    const handleChannelCreation = newChannelName => {
+    const handleChannelCreation = (newChannelName: string) => {
         let request = setupChannelCreationRequest();
         request.send(JSON.stringify({
             'newChannelName': newChannelName,
@@ -55,21 +57,25 @@ export default function NewChannelDialog(props) {
 
     const hideDialogWithAnimation = () => {
         const dialog = document.querySelector("#channelname-input-dialog");
+        if (dialog == null) {
+            throw Error("Unexpected error: dialog element not found")
+        }
+
         dialog.classList.add("fade-out");
     }
 
     const closeDialog = () => props.closeDialogCallback();
 
-    const getChannelCreationErrorObjectFrom = result => {
+    const getChannelCreationErrorObjectFrom = (result: string) => {
         if (result === 'FAILED') {
             return {
-                channelCreationSucceeded: false,
+                success: false,
                 errorMessage: CHANNEL_NAME_TAKEN_ERROR_LABEL
             };
         }
 
         return {
-            channelCreationSucceeded: false,
+            success: false,
             errorMessage: result
         }
     }
@@ -87,12 +93,12 @@ export default function NewChannelDialog(props) {
 
     return (
         <FlackDialog
+            nameInputDefaultLabel={CHANNEL_NAME_INPUT_DEFAULT_LABEL}
             dialogId="channelname-input-dialog"
             inputId="channelname-input"
             submitButtonId="channel-name-ok-btn"
             classNameForAnimation="fade-in"
             isOpen={true}
-            nameInputText=""
             handleCloseCallback={handleClose}
             nameType="channel"
             contentText={DIALOG_INSTRUCTION_TEXT}

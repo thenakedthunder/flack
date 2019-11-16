@@ -11,16 +11,36 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+//import { Function } from '@babel/types';
+//import { string } from 'prop-types';
 
 
+// Prop types
+type FlackDialogProps = {
+    nameInputDefaultLabel: string;
+    handleCloseCallback: (inputText: string) => {
+        success: boolean;
+        errorMessage?: string;
+    };
+    nameType: string;
+    dialogId: string;
+    classNameForAnimation: string;
+    isOpen: boolean;
+    contentText: string;
+    inputId: string;
+    submitButtonId: string;
+    hasCancelBtn: boolean;
+    cancelBtnOnClickCallBack?: () => void;
+    nameInputText?: string;
+};
 
 //Common dialog component that can be used to compose a specialized dialog
-export default function FlackDialog(props) {
+export default function FlackDialog(props: FlackDialogProps) {
 
     // ---------------- STATE VARIABLES -----------------
 
-    const [nameInputText, setNameInputText] =
-        React.useState(props.nameInputText);
+    const [nameInputText, setNameInputText] = React.useState(
+        props.nameInputText ? props.nameInputText : "");
 
     // if the text input is empty, users should not be able to submit
     const [isBtnDisabled, setIsBtnDisabled] =
@@ -35,15 +55,18 @@ export default function FlackDialog(props) {
 
     // --------------- HANDLER FUNCTIONS ----------------
 
-    const handleChange = event => {
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newInput = event.target.value;
         setNameInputText(newInput);       // keep the text input updated
         validate(newInput);
     }
 
     const handleClose = () => {
-        let result = props.handleCloseCallback(nameInputText);
+        const result = props.handleCloseCallback(nameInputText);
         if (!result.success) {
+            if (!result.errorMessage)
+                throw Error("an error occured without an error message.")
+
             setLabelOfTextField(result.errorMessage);
             setErrorShown(true);
             setIsBtnDisabled(true);
@@ -52,7 +75,7 @@ export default function FlackDialog(props) {
 
     // ---------------- HELPER FUNCTIONS ----------------
 
-    const validate = newInput => {
+    const validate = (newInput: string) => {
         const isInputInvalid = showErrorMessageIfNeeded(newInput);
 
         setErrorShown(isInputInvalid);
@@ -60,7 +83,7 @@ export default function FlackDialog(props) {
     }
 
 
-    const showErrorMessageIfNeeded = input => {
+    const showErrorMessageIfNeeded = (input: string) => {
         if (input.charAt(0) === " " ||
             input.charAt(input.length - 1) === " ") {
             setLabelOfTextField(
@@ -78,6 +101,14 @@ export default function FlackDialog(props) {
         return false;
     }
 
+    const cancelBtnOnClickCallBack = () => {
+        const callBack = props.cancelBtnOnClickCallBack;
+        if (!callBack) {
+            throw Error("No callback defined for cancel button.")
+        }
+
+        return callBack;
+    }
 
     // -------------- RENDERING COMPONENT ---------------
 
@@ -119,7 +150,7 @@ export default function FlackDialog(props) {
                 {props.hasCancelBtn &&
                     <Button
                         className="cancel-btn"
-                        onClick={() => props.cancelBtnOnClickCallBack()}>
+                        onClick={() => cancelBtnOnClickCallBack}>
                         Cancel
                     </Button>
                 }

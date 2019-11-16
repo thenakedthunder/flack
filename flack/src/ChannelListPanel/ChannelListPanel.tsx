@@ -3,7 +3,8 @@
 // react components
 import React from 'react';
 
-import NewChannelDialog from '../NewChannelDialog/NewChannelDialog.js'; 
+import NewChannelDialog from '../NewChannelDialog/NewChannelDialog.js';
+import { Channel } from '../Channel.js';
 
 // Material Components
 import AppBar from '@material-ui/core/AppBar';
@@ -29,6 +30,11 @@ const socket = io('http://127.0.0.1:5000');
 
 
 
+interface Payload {
+    channels: Channel[]
+}
+
+
 export default function ChannelListPanel() {
 
     // ---------------- STATE VARIABLES -----------------
@@ -40,14 +46,15 @@ export default function ChannelListPanel() {
         setDisplayNewChannelDialog] = React.useState(false);
 
     // for holding channel names
-    const [channelList, changeChannelList] = React.useState([]);
+    const [channelList, changeChannelList] =
+        React.useState<Channel[] | null>(null);
 
 
     // ------------ WEBSOCKET IMPLEMENTATION ------------
 
     React.useEffect(() => {
-        socket.on('new channel created', payload => {
-            changeChannelList(payload.channels.map(item => item.channelName))
+        socket.on('new channel created', (payload: Payload) => {
+            changeChannelList(payload.channels)
         });
     });
 
@@ -63,19 +70,24 @@ export default function ChannelListPanel() {
     let counter = 0;
 
     // rendering channels
-    const channelListItems = channelList.map((channel) => {
-        counter++;
-        return (
-            <ListItem
-                button
-                id={`channel-${counter}`}
-                key={`channel-${counter}`}
-                onClick={() => openChannel()}
-            >
-                <ListItemText primary={channel} />
-            </ListItem>
-        );
-    });
+    const channelListItems = () => {
+        if (!channelList || channelList.length == 0)
+            return;
+
+        channelList.map((channel) => {
+            counter++;
+            return (
+                <ListItem
+                    button
+                    id={`channel-${counter}`}
+                    key={`channel-${counter}`}
+                    onClick={() => openChannel()}
+                >
+                    <ListItemText primary={channel.channelName} />
+                </ListItem>
+            );
+        });
+    }
 
     const drawer = (
         <div id="drawer">
