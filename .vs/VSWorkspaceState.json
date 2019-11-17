@@ -8,8 +8,9 @@
     "\\flack\\src\\ChannelListPanel",
     "\\flack\\src\\DisplayNameDialog",
     "\\flack\\src\\FlackDialog",
-    "\\flack\\src\\NewChannelDialog"
+    "\\flack\\src\\__test__",
+    "\\flack\\tests"
   ],
-  "SelectedNode": "\\flack\\backend\\channel.py",
+  "SelectedNode": "\\flack\\backend\\channel_tests.py",
   "PreviewInSolutionExplorer": false
 }

@@ -80,6 +80,10 @@ def add_new_channel_to_channels_list(data):
                           data["display_name_of_creator"])
     channels.append(new_channel)
 
+def get_channel_list():
+    """for testing"""
+    return channels
+
 #def get_channel_from(channel_name):
 #    """gets the channel with the given name from the channels list"""
 #    channels_with_given_name = [c for c in channels if c.channel_name == 
