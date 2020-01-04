@@ -17,8 +17,10 @@ class TestHelper(object):
     
     def __init__(self, test_case, input_id=None, dialog_id=None):
         self.test_case = test_case
-        self.input_id = input_id
-        self.dialog_id = dialog_id
+        if input_id is not None:
+            self.input_id = input_id
+        if dialog_id is not None:
+            self.dialog_id = dialog_id
 
 
     def assert_text_input_value(self, expected_value):
@@ -141,10 +143,8 @@ class TestHelper(object):
             to be called as a workaround because issues with the webdriver ones
         """
         time.sleep(5)
-        TestHelper.driver.execute_script(
-            "document.querySelector('#displayname-input').value = 'gecó '")
-        TestHelper.driver.find_element_by_id("displayname-input").send_keys(
-            Keys.BACKSPACE)         #Workaround for the field to notice input
+        text_input = TestHelper.driver.find_element_by_id("displayname-input")
+        text_input.send_keys("gecó")
         
         # clicks the "Use this name" button
         time.sleep(1)           # otherwise the button is not always found

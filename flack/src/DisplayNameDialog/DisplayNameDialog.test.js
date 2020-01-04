@@ -1,21 +1,11 @@
-//import React from 'react';
-//import ReactDOM from 'react-dom';
-//import DisplayNameDialog from './DisplayNameDialog';
+describe('My First Test', function () {
+    it('Does not do much!', function () {
+        expect(true).to.equal(true)
+    })
+})
 
-//import { render, cleanup } from "@testing-library/react";
-//import "@testing-library/jest-dom/extend-expect"
-
-
-//afterEach(cleanup);
-
-//it("matches snapshot", () => {
-//	const { asFragment } = render(<DisplayNameDialog />);
-//	expect(asFragment()).toMatchSnapshot();
-//});
-
-
-//it('renders without crashing', () => {
-//	const div = document.createElement('div');
-//	ReactDOM.render(<DisplayNameDialog />, div);
-//	ReactDOM.unmountComponentAtNode(div);
-//});
+describe('My Second Test', function () {
+    it('Does not do much!', function () {
+        expect(true).to.equal(false)
+    })
+})

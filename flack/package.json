@@ -20,9 +20,13 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "tsc",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -42,6 +46,7 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^4.1.0",
     "@testing-library/react": "^9.1.4",
-    "@types/prop-types": "^15.7.3"
+    "@types/prop-types": "^15.7.3",
+    "cypress": "^3.6.1"
   }
 }
