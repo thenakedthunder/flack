@@ -3,8 +3,8 @@
 // react components
 import React from 'react';
 
-import NewChannelDialog from '../NewChannelDialog/NewChannelDialog.js';
-import { Channel } from '../Channel.js';
+import NewChannelDialog from '../NewChannelDialog/NewChannelDialog';
+import { Channel } from '../Channel';
 
 // Material Components
 import AppBar from '@material-ui/core/AppBar';

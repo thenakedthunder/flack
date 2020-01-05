@@ -1,16 +1,7 @@
 {
   "ExpandedNodes": [
     "",
-    "\\flack",
-    "\\flack\\backend",
-    "\\flack\\public",
-    "\\flack\\src",
-    "\\flack\\src\\ChannelListPanel",
-    "\\flack\\src\\DisplayNameDialog",
-    "\\flack\\src\\FlackDialog",
-    "\\flack\\src\\__test__",
-    "\\flack\\tests"
+    "\\flack"
   ],
-  "SelectedNode": "\\flack\\backend\\channel_tests.py",
   "PreviewInSolutionExplorer": false
 }

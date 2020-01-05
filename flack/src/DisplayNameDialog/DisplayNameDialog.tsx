@@ -6,7 +6,7 @@ import React from 'react';
 // styling
 import './DisplayNameDialog.css';
 
-import FlackDialog from '../FlackDialog/FlackDialog.js';
+import FlackDialog from '../FlackDialog/FlackDialog';
 
 
 export default function DisplayNameDialog() {
