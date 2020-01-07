@@ -58,22 +58,29 @@ describe('Button disabled when input empty', function () {
 describe('Input change handling', function () {
     it('Checks if functioning of the controlled element is correct',
         function () {
+
             cy.get(INPUT_ID).type('Topper Harley')
             cy.get(INPUT_ID).should('have.value', 'Topper Harley')
+
+            cy.assertNoErrorShown()
+            cy.get(SUBMIT_BUTTON_ID).should('not.be.disabled');
+
         })
 })
 
 describe('Input with leading whitespace', function () {
-    it('Checks that submitting of a name with starting with a whitespace is not allowed',
+    it('Checks that submitting of a name with a starting whitespace is not allowed',
         function () {
+
             cy.get(INPUT_ID).clear().type(' ')
             cy.assertErrorFeedback(WHITESPACE_AT_START_OR_END_ERROR_MESSAGE)
             cy.get(SUBMIT_BUTTON_ID).should('be.disabled')
 
             // test it with some text after the whitespace too
-            cy.get(INPUT_ID).clear().type(' tökfej')
+            cy.get(INPUT_ID).type('tökfej')
             cy.assertErrorFeedback(WHITESPACE_AT_START_OR_END_ERROR_MESSAGE)
             cy.get(SUBMIT_BUTTON_ID).should('be.disabled')
+
         })
 })
 
@@ -87,9 +94,9 @@ describe('Test valid input after error', function () {
 })
 
 describe('Input with trailing whitespace', function () {
-    it('Checks that submitting of a name with trailing with a whitespace is not allowed',
+    it('Checks that submitting of a name with a trailing whitespace is not allowed',
         function () {
-            cy.get(INPUT_ID).clear().type('Anyaszomorító ')
+            cy.get(INPUT_ID).type(' ')
             cy.assertErrorFeedback(WHITESPACE_AT_START_OR_END_ERROR_MESSAGE)
             cy.get(SUBMIT_BUTTON_ID).should('be.disabled')
         })
@@ -144,6 +151,9 @@ describe('Display name saved', function () {
                 const displayNameStored = window.localStorage.getItem('displayName')
                 expect(displayNameStored).to.eq('Pernahajder')
                 cy.get(INPUT_ID).should('have.value', displayNameStored)
+
+                cy.assertNoErrorShown()
+                cy.get(SUBMIT_BUTTON_ID).should('not.be.disabled')
             });
 
         })
