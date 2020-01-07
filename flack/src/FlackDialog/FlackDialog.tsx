@@ -149,7 +149,7 @@ export default function FlackDialog(props: FlackDialogProps) {
                 </Button>
                 {props.hasCancelBtn &&
                     <Button
-                        className="cancel-btn"
+                        id="cancel-btn"
                         onClick={() => cancelBtnOnClickCallBack}>
                         Cancel
                     </Button>

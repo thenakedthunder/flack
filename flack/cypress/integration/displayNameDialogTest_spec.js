@@ -87,7 +87,8 @@ describe('Input with leading whitespace', function () {
 describe('Test valid input after error', function () {
     it('Tests that the error message disappears when the user starts to type a valid input',
         function () {
-            cy.get(INPUT_ID).clear().type('burnyák')
+            cy.get(INPUT_ID).type('{moveToStart}')
+            cy.get(INPUT_ID).type('{del}')
             cy.assertNoErrorShown()
             cy.get(SUBMIT_BUTTON_ID).should('not.be.disabled')
         })

@@ -8,9 +8,9 @@
     "\\flack\\src",
     "\\flack\\src\\ChannelListPanel",
     "\\flack\\src\\DisplayNameDialog",
-    "\\flack\\src\\__test__",
-    "\\flack\\src\\__test__\\selenium"
+    "\\flack\\src\\NewChannelDialog",
+    "\\flack\\src\\__test__"
   ],
-  "SelectedNode": "\\flack\\src\\__test__\\selenium\\test_display_name_dialog.py",
+  "SelectedNode": "\\flack\\src\\__test__\\selenium\\test_new_channel_name_dialog.py",
   "PreviewInSolutionExplorer": false
 }

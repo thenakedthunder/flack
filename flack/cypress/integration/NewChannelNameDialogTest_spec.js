@@ -1,5 +1,11 @@
 const NEW_CHANNEL_INPUT_DIALOG_ID = '#channelname-input-dialog';
 const CHANNEL_NAME_INPUT_DEFAULT_LABEL = 'Channel Name'
+const CHANNEL_NAME_INPUT_ID = '#channelname-input'
+const SUBMIT_CHANNEL_NAME_BUTTON = '#channel-name-ok-btn'
+const CANCEL_BUTTON = '#cancel-btn'
+const WHITESPACE_AT_START_OR_END_ERROR_MESSAGE =
+    'The name cannot start or end with whitespaces.'
+
 
 
 before(function () {
@@ -10,13 +16,21 @@ before(function () {
 
 })
 
+Cypress.Commands.add('assertNoErrorShown', () => {
+    cy.get('.MuiInputBase-root').should('not.have.class', 'Mui-error')
+    cy.get('.MuiInputLabel-root').should('not.have.class', 'Mui-error')
+})
 
-
+Cypress.Commands.add('assertErrorFeedback', (expectedErrorText) => {
+    cy.get('.MuiInputBase-root').should('have.class', 'Mui-error')
+    cy.get('.MuiInputLabel-root').should('have.class', 'Mui-error')
+    cy.get('.MuiInputLabel-root').should('have.text', expectedErrorText)
+})
 
 
 
 describe('Dialog displayed', function () {
-	it('tests that the dialog is displayed after clicking on "Add new channel"',
+	it('tests that the dialog is displayed after clicking on "Add new channel" and its animation class',
 		function () {
 
 			cy.get('#add-new-channel-btn').click()
@@ -26,54 +40,63 @@ describe('Dialog displayed', function () {
 		})
 })
 
-describe('Assert input label', function () {
-	it('Assert that the right label is shown above the input field',
+describe('Assert correct default look of dialog', function () {
+    it('checks the label, error styling (none should be here) and the disabled state of buttons in the default state (when input field is empty)',
         function () {
 
-        	cy.get('.MuiInputLabel-root').should(
+            cy.get('.MuiInputLabel-root').should(
                 'have.text', CHANNEL_NAME_INPUT_DEFAULT_LABEL)
+            cy.get(CHANNEL_NAME_INPUT_ID).should('have.value', '')
+            cy.assertNoErrorShown()
 
-        })
-})
+            cy.get(SUBMIT_CHANNEL_NAME_BUTTON).should('be.disabled')
+            cy.get(CANCEL_BUTTON).should('not.be.disabled')
 
-describe('Button disabled when input empty', function () {
-	it('Tests that button is disabled when the input field is empty',
-        function () {
-        	// there was no display name stored in local storage, so text input
-        	// should be empty and the button disabled
-        	cy.get(INPUT_ID).should('have.value', '')
-        	cy.get(SUBMIT_BUTTON_ID).should('be.disabled')
         })
 })
 
 describe('Input change handling', function () {
 	it('Checks if functioning of the controlled element is correct',
         function () {
-        	cy.get(INPUT_ID).type('Topper Harley')
-        	cy.get(INPUT_ID).should('have.value', 'Topper Harley')
+
+        	cy.get(CHANNEL_NAME_INPUT_ID).type('Degecfalva')
+        	cy.get(CHANNEL_NAME_INPUT_ID).should('have.value', 'Degecfalva')
+
+            cy.get('.MuiInputLabel-root').should(
+                'have.text', CHANNEL_NAME_INPUT_DEFAULT_LABEL)
+            cy.assertNoErrorShown()
+            cy.get(SUBMIT_CHANNEL_NAME_BUTTON).should('not.be.disabled')
+            cy.get(CANCEL_BUTTON).should('not.be.disabled')
+
         })
 })
 
 describe('Input with leading whitespace', function () {
 	it('Checks that submitting of a name with starting with a whitespace is not allowed',
         function () {
-        	cy.get(INPUT_ID).clear().type(' ')
-        	cy.assertErrorFeedback(WHITESPACE_AT_START_OR_END_ERROR_MESSAGE)
-        	cy.get(SUBMIT_BUTTON_ID).should('be.disabled')
+
+        	cy.get(CHANNEL_NAME_INPUT_ID).clear().type(' ')
+            cy.assertErrorFeedback(WHITESPACE_AT_START_OR_END_ERROR_MESSAGE)
+            cy.get(SUBMIT_CHANNEL_NAME_BUTTON).should('be.disabled')
 
         	// test it with some text after the whitespace too
-        	cy.get(INPUT_ID).clear().type(' tökfej')
+            cy.get(CHANNEL_NAME_INPUT_ID).type('Barázdabillegetõk')
         	cy.assertErrorFeedback(WHITESPACE_AT_START_OR_END_ERROR_MESSAGE)
-        	cy.get(SUBMIT_BUTTON_ID).should('be.disabled')
+            cy.get(SUBMIT_CHANNEL_NAME_BUTTON).should('be.disabled')
+            cy.get(CANCEL_BUTTON).should('not.be.disabled')
+
         })
 })
 
 describe('Test valid input after error', function () {
 	it('Tests that the error message disappears when the user starts to type a valid input',
         function () {
-        	cy.get(INPUT_ID).clear().type('burnyák')
+
+            cy.get(CHANNEL_NAME_INPUT_ID).type('{moveToStart}')
+            cy.get(CHANNEL_NAME_INPUT_ID).type('{del}')
         	cy.assertNoErrorShown()
-        	cy.get(SUBMIT_BUTTON_ID).should('not.be.disabled')
+            cy.get(SUBMIT_CHANNEL_NAME_BUTTON).should('not.be.disabled')
+
         })
 })
 
