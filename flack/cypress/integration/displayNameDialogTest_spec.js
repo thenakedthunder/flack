@@ -85,21 +85,26 @@ describe('Input with leading whitespace', function () {
 })
 
 describe('Test valid input after error', function () {
-    it('Tests that the error message disappears when the user starts to type a valid input',
+    it('Tests that the error message disappears when the user deletes the leading whitespace, making the input valid',
         function () {
+
             cy.get(INPUT_ID).type('{moveToStart}')
             cy.get(INPUT_ID).type('{del}')
+
             cy.assertNoErrorShown()
             cy.get(SUBMIT_BUTTON_ID).should('not.be.disabled')
+
         })
 })
 
 describe('Input with trailing whitespace', function () {
     it('Checks that submitting of a name with a trailing whitespace is not allowed',
         function () {
+
             cy.get(INPUT_ID).type(' ')
             cy.assertErrorFeedback(WHITESPACE_AT_START_OR_END_ERROR_MESSAGE)
             cy.get(SUBMIT_BUTTON_ID).should('be.disabled')
+
         })
 })
 
@@ -125,7 +130,7 @@ describe('Submit', function () {
     it('tests again that valid input is excepted, and then the submitting',
         function () {
 
-            cy.get(INPUT_ID).clear().type('tirpák')
+            cy.get(INPUT_ID).type('tirpák')
             cy.assertNoErrorShown()
             cy.get(SUBMIT_BUTTON_ID).should('not.be.disabled')
 
@@ -143,7 +148,11 @@ describe('Display name saved', function () {
         function () {
 
             cy.visit('http://127.0.0.1:5000/')      // reload page
-            cy.get(INPUT_ID).clear().type('Pernahajder')
+
+            //though this input should be prefilled from local storage due to
+            //the app logic, cypress always clears the cached items between 
+            //tests, that is why it will be empty here
+            cy.get(INPUT_ID).type('Pernahajder')
             cy.get(SUBMIT_BUTTON_ID).click()
 
             cy.visit('http://127.0.0.1:5000/')      // reload page
@@ -155,6 +164,9 @@ describe('Display name saved', function () {
 
                 cy.assertNoErrorShown()
                 cy.get(SUBMIT_BUTTON_ID).should('not.be.disabled')
+                //this simulates the user expecting the suggestion for their display name
+                cy.get(SUBMIT_BUTTON_ID).click()
+
             });
 
         })

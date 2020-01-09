@@ -20,6 +20,8 @@ before(function () {
 Cypress.Commands.add('assertNoErrorShown', () => {
     cy.get('.MuiInputBase-root').should('not.have.class', 'Mui-error')
     cy.get('.MuiInputLabel-root').should('not.have.class', 'Mui-error')
+    cy.get('.MuiInputLabel-root').should(
+        'have.text', CHANNEL_NAME_INPUT_DEFAULT_LABEL)
 })
 
 Cypress.Commands.add('assertErrorFeedback', (expectedErrorText) => {
@@ -45,8 +47,6 @@ describe('Assert correct default look of dialog', function () {
     it('checks the label, error styling (none should be here) and the disabled state of buttons in the default state (when input field is empty)',
         function () {
 
-            cy.get('.MuiInputLabel-root').should(
-                'have.text', CHANNEL_NAME_INPUT_DEFAULT_LABEL)
             cy.get(CHANNEL_NAME_INPUT_ID).should('have.value', '')
             cy.assertNoErrorShown()
 
@@ -63,8 +63,6 @@ describe('Input change handling', function () {
         	cy.get(CHANNEL_NAME_INPUT_ID).type('Degecfalva')
         	cy.get(CHANNEL_NAME_INPUT_ID).should('have.value', 'Degecfalva')
 
-            cy.get('.MuiInputLabel-root').should(
-                'have.text', CHANNEL_NAME_INPUT_DEFAULT_LABEL)
             cy.assertNoErrorShown()
             cy.get(SUBMIT_CHANNEL_NAME_BUTTON).should('not.be.disabled')
             cy.get(CANCEL_BUTTON).should('not.be.disabled')
