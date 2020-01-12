@@ -23,7 +23,7 @@ export default function NewChannelDialog(props: {
 
     // --------------- HANDLER FUNCTIONS ----------------
 
-    const handleClose = (newChannelName: string) => {
+    const handleSubmitClick = (newChannelName: string) => {
         if (!newChannelName)
             throw Error("Unexpected error: empty string provided as " +
                 "channel name");
@@ -99,7 +99,7 @@ export default function NewChannelDialog(props: {
             submitButtonId="channel-name-ok-btn"
             classNameForAnimation="fade-in"
             isOpen={true}
-            handleCloseCallback={handleClose}
+            handleCloseCallback={handleSubmitClick}
             nameType="channel"
             contentText={DIALOG_INSTRUCTION_TEXT}
             hasCancelBtn={true}

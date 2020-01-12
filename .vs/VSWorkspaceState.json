@@ -2,16 +2,15 @@
   "ExpandedNodes": [
     "",
     "\\flack",
+    "\\flack\\backend",
     "\\flack\\cypress",
     "\\flack\\cypress\\fixtures",
     "\\flack\\cypress\\integration",
     "\\flack\\src",
     "\\flack\\src\\ChannelListPanel",
     "\\flack\\src\\DisplayNameDialog",
-    "\\flack\\src\\NewChannelDialog",
-    "\\flack\\src\\__test__",
-    "\\flack\\src\\__test__\\selenium"
+    "\\flack\\src\\NewChannelDialog"
   ],
-  "SelectedNode": "\\flack\\cypress\\integration\\displayNameDialogTest_spec.js",
+  "SelectedNode": "\\flack\\backend\\application_tests.py",
   "PreviewInSolutionExplorer": false
 }

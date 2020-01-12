@@ -70,7 +70,11 @@ export default function ChannelListPanel() {
     let counter = 0;
 
     // rendering channels
-    const channelListItems = () => {
+    const channelListItems = (
+        {
+
+        }
+    );
         if (!channelList || channelList.length == 0)
             return;
 
@@ -86,8 +90,8 @@ export default function ChannelListPanel() {
                     <ListItemText primary={channel.channelName} />
                 </ListItem>
             );
-        });
-    }
+        })
+    );
 
     const drawer = (
         <div id="drawer">

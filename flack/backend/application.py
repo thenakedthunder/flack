@@ -7,6 +7,8 @@ from flask_cors  import CORS, cross_origin
 from flask_socketio import SocketIO, emit
 
 from channel import Channel
+from channel_registry import Channel_registry
+
 
 
 # ------------------ APP SETUP ------------------
@@ -21,7 +23,7 @@ cors = CORS(app, resources={r"/channel_creation": {"origins": "*"}})
 socketio = SocketIO(app)
 
 # for keeping track of existing channels
-channels = []
+channel_registry = Channel_registry.getInstance()
 
 
 # -------------------- ROUTES --------------------
@@ -33,15 +35,17 @@ def index():
 @app.route("/channel_creation", methods=['POST'])
 @cross_origin(origin='localhost',headers=['Content- Type','Authorization'])
 def create_channel():
+    print("")
     data = request.json
-    response = get_response_for_channel_creation_request(
+    response = channel_registry.get_response_for_channel_creation_request(
         data["newChannelName"])
     
     if (response == 'SUCCESS'):
-        add_new_channel_to_channels_list(data)
+        channel_registry.add_new_channel_to_channels_list(data)
 
         socketio.emit("new channel created", 
-             {"channels": [channel.serialize() for channel in channels]}, 
+             {"channels": [channel.serialize() for channel in 
+                           channel_registry.get_channel_list()]}, 
              broadcast=True)
 
     return response
@@ -56,43 +60,10 @@ def add_message_to_channel(data):
     display_name = data["display_name_of_sender"]
     channel_name = data["channelName"]
     
-    channel = get_channel_from(channel_name)
+    channel = channel_registry.get_channel_from(channel_name)
 
 
-# ---------------- HELPER FUNCTIONS ----------------
 
-def is_channel_name_taken(channel_name):
-    """Checks if given channel name is taken"""
-    channels_list = (chan.channel_name.lower() for chan in channels)
-    if channel_name.lower() in channels_list:
-        return True
-
-    return False
-
-def get_response_for_channel_creation_request(channel_name):    
-    if (is_channel_name_taken(channel_name)):
-        return 'FAILED'
-    
-    return 'SUCCESS'
-
-def add_new_channel_to_channels_list(data):
-    new_channel = Channel(data["newChannelName"], 
-                          data["display_name_of_creator"])
-    channels.append(new_channel)
-
-def get_channel_list():
-    """for testing"""
-    return channels
-
-#def get_channel_from(channel_name):
-#    """gets the channel with the given name from the channels list"""
-#    channels_with_given_name = [c for c in channels if c.channel_name == 
-#                                channel_name]
-#    if channels_with_given_name.count != 1:
-#        print(channels_with_given_name.count)
-#        raise RuntimeError("No or more than one channel found with this name")
-    
-#    return channels_with_given_name[0]
 
 
 if __name__ == '__main__':
