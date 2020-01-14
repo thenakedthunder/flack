@@ -11,6 +11,6 @@
     "\\flack\\src\\DisplayNameDialog",
     "\\flack\\src\\NewChannelDialog"
   ],
-  "SelectedNode": "\\flack\\backend\\application_tests.py",
+  "SelectedNode": "\\flack\\backend\\application.py",
   "PreviewInSolutionExplorer": false
 }

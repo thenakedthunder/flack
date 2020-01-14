@@ -1,7 +1,7 @@
 // -------------------- IMPORTS --------------------
 
 // react components
-import React from 'react';
+import React, { Fragment } from 'react';
 
 import NewChannelDialog from '../NewChannelDialog/NewChannelDialog';
 import { Channel } from '../Channel';
@@ -40,14 +40,14 @@ export default function ChannelListPanel() {
     // ---------------- STATE VARIABLES -----------------
 
     // drawer's visibility on small screens
-    const [mobileOpen, setMobileOpen] = React.useState(false);
+    const [mobileOpen, setMobileOpen] = React.useState(false)
 
     const [displayNewChannelDialog,
-        setDisplayNewChannelDialog] = React.useState(false);
+        setDisplayNewChannelDialog] = React.useState(false)
 
     // for holding channel names
     const [channelList, changeChannelList] =
-        React.useState<Channel[] | null>(null);
+        React.useState(new Array<Channel>())
 
 
     // ------------ WEBSOCKET IMPLEMENTATION ------------
@@ -67,31 +67,18 @@ export default function ChannelListPanel() {
 
     // ---------------- DRAWER COMPONENT ----------------
 
-    let counter = 0;
-
-    // rendering channels
-    const channelListItems = (
-        {
-
-        }
-    );
-        if (!channelList || channelList.length == 0)
-            return;
-
-        channelList.map((channel) => {
-            counter++;
-            return (
-                <ListItem
-                    button
-                    id={`channel-${counter}`}
-                    key={`channel-${counter}`}
-                    onClick={() => openChannel()}
-                >
-                    <ListItemText primary={channel.channelName} />
-                </ListItem>
-            );
+    const renderChannelListItems = (channelList: Channel[]) => {
+        return channelList.map((channel, index) => {
+            return <ListItem
+                button
+                id={`channel-${index + 1}`}
+                key={`channel-${index + 1}`}
+                onClick={() => openChannel()}
+            >
+                <ListItemText primary={channel.channelName} />
+            </ListItem>
         })
-    );
+    }
 
     const drawer = (
         <div id="drawer">
@@ -100,13 +87,13 @@ export default function ChannelListPanel() {
                     <ListItemIcon><AddIcon /></ListItemIcon>
                     <ListItemText id="add-new-channel-btn" primary="Add a new channel" />
                 </ListItem>
-                {channelListItems}
+                {renderChannelListItems(channelList)}
             </List>
             <Divider />
         </div>
     );
 
-    
+
     // -------------- RENDERING COMPONENT ---------------
 
     return (
@@ -123,7 +110,7 @@ export default function ChannelListPanel() {
                     </IconButton>
                     <Typography variant="h6" noWrap>
                         Channels
-                    </Typography>
+                        </Typography>
                 </Toolbar>
             </AppBar>
             <nav>

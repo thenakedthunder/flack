@@ -29,7 +29,7 @@ export default function NewChannelDialog(props: {
                 "channel name");
 
         const result = handleChannelCreation(newChannelName);
-        if (result != 'SUCCESS')
+        if (result !== 'SUCCESS')
             return getChannelCreationErrorObjectFrom(result);
 
         hideDialogWithAnimation();
@@ -46,7 +46,7 @@ export default function NewChannelDialog(props: {
             'display_name_of_creator': localStorage.getItem('displayName')
         }))
 
-        if (request.status != 200) {
+        if (request.status !== 200) {
             return "Unexpected error :("
         }
 

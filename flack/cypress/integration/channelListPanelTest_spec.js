@@ -21,7 +21,7 @@ describe('New channel displayed in list', function () {
             cy.get(CHANNEL_NAME_INPUT_ID).type('Bumburnyákok')
             cy.get(SUBMIT_CHANNEL_NAME_BUTTON).click()
 
-            cy.get('#channel-1').invoke('val').should("be", 'Bumburnyákok')
+            cy.get('#channel-1').should('have.text', 'Bumburnyákok')
 
         })
 
