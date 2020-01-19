@@ -7,6 +7,7 @@ import React from 'react';
 import './NewChannelDialog.css';
 
 import FlackDialog from '../FlackDialog/FlackDialog';
+import { conditionalExpression } from '@babel/types';
 
 export default function NewChannelDialog(props: {
     closeDialogCallback: () => void;
@@ -40,17 +41,29 @@ export default function NewChannelDialog(props: {
     }
 
     const handleChannelCreation = (newChannelName: string) => {
-        let request = setupChannelCreationRequest();
-        request.send(JSON.stringify({
+        const channelDataStringified = JSON.stringify({
             'newChannelName': newChannelName,
             'display_name_of_creator': localStorage.getItem('displayName')
-        }))
+        })
 
-        if (request.status !== 200) {
-            return "Unexpected error :("
-        }
+        let result: string
+        makeChannelCreationRequest(channelDataStringified).then(
+            responseText => result = responseText,
+            err => result = "Unexpected error :("
+        )
+        return result
 
-        return request.responseText;
+        //let request = setupChannelCreationRequest();
+        //request.send(JSON.stringify({
+        //    'newChannelName': newChannelName,
+        //    'display_name_of_creator': localStorage.getItem('displayName')
+        //}))
+
+        //if (request.status !== 200) {
+        //    return "Unexpected error :("
+        //}
+
+        //return request.responseText;
     };
 
     // ---------------- HELPER FUNCTIONS ----------------
@@ -67,7 +80,7 @@ export default function NewChannelDialog(props: {
     const closeDialog = () => props.closeDialogCallback();
 
     const getChannelCreationErrorObjectFrom = (result: string) => {
-        if (result === 'FAILED') {
+        if (result === 'CHANNEL_NAME_TAKEN') {
             return {
                 success: false,
                 errorMessage: CHANNEL_NAME_TAKEN_ERROR_LABEL
@@ -79,6 +92,21 @@ export default function NewChannelDialog(props: {
             errorMessage: result
         }
     }
+
+    const makeChannelCreationRequest = (channelData: string) => 
+        new Promise<string>((resolve, reject) => {
+            const url = 'http://localhost:5000/channel_creation'
+            const request = new XMLHttpRequest()
+            request.open('POST', url)
+            request.setRequestHeader("Content-Type", "application/json");
+
+            request.onload = () => (request.status === 200) ?
+                resolve(request.responseText) :
+                reject(Error(request.statusText))
+            request.onerror = (err) => reject(err)
+            request.send(channelData)
+        })
+
 
     const setupChannelCreationRequest = () => {
         let request = new XMLHttpRequest()

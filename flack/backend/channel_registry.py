@@ -39,7 +39,7 @@ class Channel_registry:
 
     def get_response_for_channel_creation_request(self, channel_name):    
         if (self.is_channel_name_taken(channel_name)):
-            return 'FAILED'
+            return 'CHANNEL_NAME_TAKEN'
     
         return 'SUCCESS'
 

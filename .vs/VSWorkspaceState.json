@@ -11,6 +11,6 @@
     "\\flack\\src\\DisplayNameDialog",
     "\\flack\\src\\NewChannelDialog"
   ],
-  "SelectedNode": "\\flack\\backend\\application.py",
+  "SelectedNode": "\\flack\\src\\NewChannelDialog\\NewChannelDialog.tsx",
   "PreviewInSolutionExplorer": false
 }
