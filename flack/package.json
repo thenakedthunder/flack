@@ -41,6 +41,6 @@
     "@testing-library/jest-dom": "^4.1.0",
     "@testing-library/react": "^9.1.4",
     "@types/prop-types": "^15.7.3",
-    "cypress": "^3.6.1"
+    "cypress": "^3.8.2"
   }
 }

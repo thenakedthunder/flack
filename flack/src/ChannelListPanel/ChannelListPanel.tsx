@@ -1,7 +1,7 @@
 // -------------------- IMPORTS --------------------
 
 // react components
-import React, { Fragment } from 'react';
+import React from 'react';
 
 import NewChannelDialog from '../NewChannelDialog/NewChannelDialog';
 import { Channel } from '../Channel';
@@ -46,7 +46,7 @@ export default function ChannelListPanel() {
         setDisplayNewChannelDialog] = React.useState(false)
 
     // for holding channel names
-    const [channelList, changeChannelList] =
+    const [channelList, updateChannelList] =
         React.useState(new Array<Channel>())
 
 
@@ -54,7 +54,7 @@ export default function ChannelListPanel() {
 
     React.useEffect(() => {
         socket.on('new channel created', (payload: Payload) => {
-            changeChannelList(payload.channels)
+            updateChannelList(payload.channels)
         });
     });
 
@@ -71,8 +71,8 @@ export default function ChannelListPanel() {
         return channelList.map((channel, index) => {
             return <ListItem
                 button
-                id={`channel-${index + 1}`}
-                key={`channel-${index + 1}`}
+                id={`channel-${index}`}
+                key={`channel-${index}`}
                 onClick={() => openChannel()}
             >
                 <ListItemText primary={channel.channelName} />

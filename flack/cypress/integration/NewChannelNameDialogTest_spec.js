@@ -8,7 +8,7 @@ const WHITESPACE_AT_START_OR_END_ERROR_MESSAGE =
 const NO_STRING_PROVIDED_ERROR_MESSAGE = "Please provide a channel name."
 const CHANNEL_NAME_TAKEN_ERROR_LABEL =
     "Sorry, this name is already used. Please choose another one.";
-
+const ADD_NEW_CHANNEL_BUTTON = '#add-new-channel-btn'
 
 
 
@@ -39,7 +39,7 @@ describe('Dialog displayed', function () {
 	it('tests that the dialog is displayed after clicking on "Add new channel" and its animation class',
 		function () {
 
-			cy.get('#add-new-channel-btn').click()
+			cy.get(ADD_NEW_CHANNEL_BUTTON).click()
 			cy.get(NEW_CHANNEL_INPUT_DIALOG_ID).should('exist');
 			cy.get(NEW_CHANNEL_INPUT_DIALOG_ID).should('have.class', 'fade-in')
 
@@ -145,18 +145,19 @@ describe('Input with empty string', function () {
 })
 
 describe('Input with an already used channel name', function () {
-    it('tests that the user cannot submit a channel name already used'),
+    it('tests that the user cannot submit a channel name already used',
         function () {
 
             cy.get(CHANNEL_NAME_INPUT_ID).type("Csepûrágók")
             cy.get(SUBMIT_CHANNEL_NAME_BUTTON).click()
 
-            cy.get('#add-new-channel-btn').click()
+            cy.get(ADD_NEW_CHANNEL_BUTTON).click()
             cy.get(CHANNEL_NAME_INPUT_ID).type("Csepûrágók")
             cy.get(SUBMIT_CHANNEL_NAME_BUTTON).click()
 
             cy.assertErrorFeedback(CHANNEL_NAME_TAKEN_ERROR_LABEL)
             cy.get(SUBMIT_CHANNEL_NAME_BUTTON).should('be.disabled')
             cy.get(CANCEL_BUTTON).should('not.be.disabled')
-        }
+
+        })
 })

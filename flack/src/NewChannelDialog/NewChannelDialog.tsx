@@ -7,7 +7,6 @@ import React from 'react';
 import './NewChannelDialog.css';
 
 import FlackDialog from '../FlackDialog/FlackDialog';
-import { conditionalExpression } from '@babel/types';
 
 export default function NewChannelDialog(props: {
     closeDialogCallback: () => void;
@@ -26,8 +25,8 @@ export default function NewChannelDialog(props: {
 
     const handleSubmitClick = (newChannelName: string) => {
         if (!newChannelName)
-            throw Error("Unexpected error: empty string provided as " +
-                "channel name");
+            throw Error("Unexpected error: empty string provided as channel" +
+                "name");
 
         const result = handleChannelCreation(newChannelName);
         if (result !== 'SUCCESS')
@@ -49,19 +48,6 @@ export default function NewChannelDialog(props: {
         const request = getChannelCreationRequest()
         return getResponseFromChannelCreationRequest(
             channelDataStringified, request)
-
-
-        //let request = setupChannelCreationRequest();
-        //request.send(JSON.stringify({
-        //    'newChannelName': newChannelName,
-        //    'display_name_of_creator': localStorage.getItem('displayName')
-        //}))
-
-        //if (request.status !== 200) {
-        //    return "Unexpected error :("
-        //}
-
-        //return request.responseText;
     };
 
     // ---------------- HELPER FUNCTIONS ----------------
@@ -103,7 +89,6 @@ export default function NewChannelDialog(props: {
 
     const getResponseFromChannelCreationRequest =
         (channelData: string, request: XMLHttpRequest): string => {
-
             request.send(channelData)
             if (request.status !== 200) {
                 return "Unexpected error :("
