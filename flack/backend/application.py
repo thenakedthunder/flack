@@ -36,7 +36,6 @@ def index():
 @cross_origin(origin='localhost',headers=['Content- Type','Authorization'])
 def create_channel():
     data = request.json
-    print('\n' + data["newChannelName"])
     response = channel_registry.get_response_for_channel_creation_request(
         data["newChannelName"])
     

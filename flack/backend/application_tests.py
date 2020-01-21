@@ -73,7 +73,7 @@ class application_tests(unittest.TestCase):
         self.assertEqual(
             application.
             channel_registry.get_response_for_channel_creation_request(
-            "Dave"), "FAILED")
+            "Dave"), "CHANNEL_NAME_TAKEN")
 
     def test_add_new_channel_to_empty_channels_list(self):
         """add_new_channel_to_channels_list test"""

@@ -4,7 +4,6 @@
     "\\flack",
     "\\flack\\backend",
     "\\flack\\cypress",
-    "\\flack\\cypress\\fixtures",
     "\\flack\\cypress\\integration",
     "\\flack\\src",
     "\\flack\\src\\ChannelListPanel",

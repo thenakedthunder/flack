@@ -6,6 +6,9 @@ const CANCEL_BUTTON = '#cancel-btn'
 const WHITESPACE_AT_START_OR_END_ERROR_MESSAGE =
     'The name cannot start or end with whitespaces.'
 const NO_STRING_PROVIDED_ERROR_MESSAGE = "Please provide a channel name."
+const CHANNEL_NAME_TAKEN_ERROR_LABEL =
+    "Sorry, this name is already used. Please choose another one.";
+
 
 
 
@@ -139,4 +142,21 @@ describe('Input with empty string', function () {
             cy.get(CANCEL_BUTTON).should('not.be.disabled')
 
         })
+})
+
+describe('Input with an already used channel name', function () {
+    it('tests that the user cannot submit a channel name already used'),
+        function () {
+
+            cy.get(CHANNEL_NAME_INPUT_ID).type("Csepûrágók")
+            cy.get(SUBMIT_CHANNEL_NAME_BUTTON).click()
+
+            cy.get('#add-new-channel-btn').click()
+            cy.get(CHANNEL_NAME_INPUT_ID).type("Csepûrágók")
+            cy.get(SUBMIT_CHANNEL_NAME_BUTTON).click()
+
+            cy.assertErrorFeedback(CHANNEL_NAME_TAKEN_ERROR_LABEL)
+            cy.get(SUBMIT_CHANNEL_NAME_BUTTON).should('be.disabled')
+            cy.get(CANCEL_BUTTON).should('not.be.disabled')
+        }
 })

@@ -46,12 +46,10 @@ export default function NewChannelDialog(props: {
             'display_name_of_creator': localStorage.getItem('displayName')
         })
 
-        let result: string
-        makeChannelCreationRequest(channelDataStringified).then(
-            responseText => result = responseText,
-            err => result = "Unexpected error :("
-        )
-        return result
+        const request = getChannelCreationRequest()
+        return getResponseFromChannelCreationRequest(
+            channelDataStringified, request)
+
 
         //let request = setupChannelCreationRequest();
         //request.send(JSON.stringify({
@@ -93,29 +91,27 @@ export default function NewChannelDialog(props: {
         }
     }
 
-    const makeChannelCreationRequest = (channelData: string) => 
-        new Promise<string>((resolve, reject) => {
-            const url = 'http://localhost:5000/channel_creation'
-            const request = new XMLHttpRequest()
-            request.open('POST', url)
-            request.setRequestHeader("Content-Type", "application/json");
-
-            request.onload = () => (request.status === 200) ?
-                resolve(request.responseText) :
-                reject(Error(request.statusText))
-            request.onerror = (err) => reject(err)
-            request.send(channelData)
-        })
-
-
-    const setupChannelCreationRequest = () => {
-        let request = new XMLHttpRequest()
+    const getChannelCreationRequest = () => {
+        const url = 'http://localhost:5000/channel_creation'
+        const request = new XMLHttpRequest()
         // for the right functioning, this request requires to be synchronous
-        request.open('POST', 'http://localhost:5000/channel_creation', false);
+        request.open('POST', url, false)
         request.setRequestHeader("Content-Type", "application/json");
 
         return request;
     }
+
+    const getResponseFromChannelCreationRequest =
+        (channelData: string, request: XMLHttpRequest): string => {
+
+            request.send(channelData)
+            if (request.status !== 200) {
+                return "Unexpected error :("
+            }
+
+            return request.responseText
+    }
+
 
     // -------------- RENDERING COMPONENT ---------------
 
