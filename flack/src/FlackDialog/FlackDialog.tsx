@@ -101,14 +101,15 @@ export default function FlackDialog(props: FlackDialogProps) {
         return false;
     }
 
-    const cancelBtnOnClickCallBack = () => {
-        const callBack = props.cancelBtnOnClickCallBack;
-        if (!callBack) {
-            throw Error("No callback defined for cancel button.")
-        }
+    //const cancelBtnOnClickCallBack = () => {
+    //    const callBack = props.cancelBtnOnClickCallBack;
+    //    if (!callBack) {
+    //        throw Error("No callback defined for cancel button.")
+    //    }
 
-        return callBack;
-    }
+    //    props.cancelBtnOnClickCallBack()
+    //    return callBack;
+    //}
 
     // -------------- RENDERING COMPONENT ---------------
 
@@ -150,7 +151,7 @@ export default function FlackDialog(props: FlackDialogProps) {
                 {props.hasCancelBtn &&
                     <Button
                         id="cancel-btn"
-                        onClick={() => cancelBtnOnClickCallBack}>
+                        onClick={props.cancelBtnOnClickCallBack}>
                         Cancel
                     </Button>
                 }

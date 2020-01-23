@@ -112,7 +112,7 @@ export default function NewChannelDialog(props: {
             nameType="channel"
             contentText={DIALOG_INSTRUCTION_TEXT}
             hasCancelBtn={true}
-            cancelBtnOnClickCallBack={closeDialog}
+            cancelBtnOnClickCallBack={() => props.closeDialogCallback()}
         />
     );
 }

@@ -161,3 +161,24 @@ describe('Input with an already used channel name', function () {
 
         })
 })
+
+describe('Checks the functioning of the Cancel button', function () {
+    it('tests that the dialog closes after clicking the "Cancel" button',
+        function () {
+
+            cy.get(CANCEL_BUTTON).click()
+            cy.get(NEW_CHANNEL_INPUT_DIALOG_ID).should('not.exist')
+
+            //test again with no errors
+            cy.get(ADD_NEW_CHANNEL_BUTTON).click()
+            cy.get(CHANNEL_NAME_INPUT_ID).type("Burnyákok")
+            cy.get(CANCEL_BUTTON).click()
+            cy.get(NEW_CHANNEL_INPUT_DIALOG_ID).should('not.exist')
+
+            //test again no input
+            cy.get(ADD_NEW_CHANNEL_BUTTON).click()
+            cy.get(CANCEL_BUTTON).click()
+            cy.get(NEW_CHANNEL_INPUT_DIALOG_ID).should('not.exist')
+
+        })
+})
