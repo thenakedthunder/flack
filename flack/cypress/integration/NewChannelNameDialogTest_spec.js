@@ -131,6 +131,35 @@ describe('Delete trailing whitespace', function () {
         })
 })
 
+describe('Input with leading AND trailing whitespace', function () {
+    it('Checks that submitting of a name with leading or trailing whitespaces is not allowed',
+        function () {
+
+            cy.get(CHANNEL_NAME_INPUT_ID).type('{moveToStart}')
+            cy.get(CHANNEL_NAME_INPUT_ID).type(' ')
+            cy.get(CHANNEL_NAME_INPUT_ID).type('{moveToEnd}')
+            cy.get(CHANNEL_NAME_INPUT_ID).type(' ')
+
+            cy.assertErrorFeedback(WHITESPACE_AT_START_OR_END_ERROR_MESSAGE)
+            cy.get(SUBMIT_CHANNEL_NAME_BUTTON).should('be.disabled')
+            cy.get(CANCEL_BUTTON).should('not.be.disabled')
+
+            cy.get(CHANNEL_NAME_INPUT_ID).type('{moveToStart}')
+            cy.get(CHANNEL_NAME_INPUT_ID).type('{del}')
+
+            cy.assertErrorFeedback(WHITESPACE_AT_START_OR_END_ERROR_MESSAGE)
+            cy.get(SUBMIT_CHANNEL_NAME_BUTTON).should('be.disabled')
+            cy.get(CANCEL_BUTTON).should('not.be.disabled')
+
+            cy.get(CHANNEL_NAME_INPUT_ID).type('{moveToEnd}')
+            cy.get(CHANNEL_NAME_INPUT_ID).type('{backspace}')
+
+            cy.assertNoErrorShown()
+            cy.get(SUBMIT_CHANNEL_NAME_BUTTON).should('not.be.disabled')
+            cy.get(CANCEL_BUTTON).should('not.be.disabled')
+        })
+})
+
 describe('Input with empty string', function () {
 	it('tests that empty string is not accepted as a valid display name',
         function () {

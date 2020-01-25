@@ -2,14 +2,13 @@
   "ExpandedNodes": [
     "",
     "\\flack",
-    "\\flack\\backend",
     "\\flack\\cypress",
     "\\flack\\cypress\\integration",
+    "\\flack\\public",
     "\\flack\\src",
-    "\\flack\\src\\ChannelListPanel",
-    "\\flack\\src\\DisplayNameDialog",
+    "\\flack\\src\\FlackDialog",
     "\\flack\\src\\NewChannelDialog"
   ],
-  "SelectedNode": "\\flack\\src\\App.js",
+  "SelectedNode": "\\flack\\src\\FlackDialog\\FlackDialog.tsx",
   "PreviewInSolutionExplorer": false
 }

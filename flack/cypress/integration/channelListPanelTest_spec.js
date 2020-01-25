@@ -1,6 +1,6 @@
 const CHANNEL_NAME_INPUT_ID = '#channelname-input'
 const SUBMIT_CHANNEL_NAME_BUTTON = '#channel-name-ok-btn'
-
+const CANCEL_BUTTON = '#cancel-btn'
 
 
 
@@ -22,6 +22,19 @@ describe('New channel displayed in list', function () {
             cy.get(SUBMIT_CHANNEL_NAME_BUTTON).click()
 
             cy.get('#channel-0').should('have.text', 'Bumburnyákok')
+
+        })
+
+})
+
+describe('New channel not added when dialog cancelled', function () {
+    it('tests that the list does not show anything new when the "New Channel Dialog" is cancelled',
+        function () {
+
+            cy.get('#add-new-channel-btn').click()
+            cy.get(CANCEL_BUTTON).click()
+
+            cy.get('#channel-1').should('not.exist')
 
         })
 
