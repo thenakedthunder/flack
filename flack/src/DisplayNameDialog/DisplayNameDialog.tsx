@@ -2,11 +2,11 @@
 
 // react components
 import React from 'react';
-
 // styling
 import './DisplayNameDialog.css';
 
 import FlackDialog from '../FlackDialog/FlackDialog';
+
 
 
 export default function DisplayNameDialog() {
@@ -27,10 +27,6 @@ export default function DisplayNameDialog() {
     // --------------- HANDLER FUNCTIONS ----------------
 
     const handleClose = (displayName: string) => {
-        if (!displayName)
-            throw Error("Unexpected error: empty string provided as " +
-                "displayname");
-
         localStorage.setItem(DISPLAY_NAME, displayName);
         hideDialogWithAnimation();
 

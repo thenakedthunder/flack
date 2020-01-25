@@ -2,15 +2,21 @@
 
 // react components
 import React from 'react';
-
 // styling
 import './NewChannelDialog.css';
 
 import FlackDialog from '../FlackDialog/FlackDialog';
 
-export default function NewChannelDialog(props: {
+
+
+
+// Prop types
+type NewChannelDialogProps = {
     closeDialogCallback: () => void;
-}) {
+};
+
+
+export default function NewChannelDialog(props: NewChannelDialogProps) {
 
     // ------------------- CONSTANTS --------------------
 
@@ -24,57 +30,36 @@ export default function NewChannelDialog(props: {
     // --------------- HANDLER FUNCTIONS ----------------
 
     const handleSubmitClick = (newChannelName: string) => {
-        if (!newChannelName)
-            throw Error("Unexpected error: empty string provided as channel" +
-                "name");
-
-        const result = handleChannelCreation(newChannelName);
+        const result = getResponseFromChannelCreationRequest(
+            getChannelDataJSON(newChannelName), getChannelCreationRequest());
         if (result !== 'SUCCESS')
             return getChannelCreationErrorObjectFrom(result);
 
         hideDialogWithAnimation();
-        // gives time for the animation to end
-        setTimeout(() => closeDialog(), 750); 
+        removeDialogFromDOMAfterAnimationFinished();
 
         return { success: true }
     }
 
-    const handleChannelCreation = (newChannelName: string) => {
-        const channelDataStringified = JSON.stringify({
-            'newChannelName': newChannelName,
-            'display_name_of_creator': localStorage.getItem('displayName')
-        })
-
-        const request = getChannelCreationRequest()
-        return getResponseFromChannelCreationRequest(
-            channelDataStringified, request)
-    };
 
     // ---------------- HELPER FUNCTIONS ----------------
 
-    const hideDialogWithAnimation = () => {
-        const dialog = document.querySelector("#channelname-input-dialog");
-        if (dialog == null) {
-            throw Error("Unexpected error: dialog element not found")
+    const getResponseFromChannelCreationRequest =
+        (channelDataJSON: string, request: XMLHttpRequest): string => {
+
+            request.send(channelDataJSON)
+            if (request.status !== 200) {
+                return "Unexpected error :("
+            }
+
+            return request.responseText
         }
 
-        dialog.classList.add("fade-out");
-    }
-
-    const closeDialog = () => props.closeDialogCallback();
-
-    const getChannelCreationErrorObjectFrom = (result: string) => {
-        if (result === 'CHANNEL_NAME_TAKEN') {
-            return {
-                success: false,
-                errorMessage: CHANNEL_NAME_TAKEN_ERROR_LABEL
-            };
-        }
-
-        return {
-            success: false,
-            errorMessage: result
-        }
+    const getChannelDataJSON = (newChannelName: string) => {
+        return JSON.stringify({
+            'newChannelName': newChannelName,
+            'display_name_of_creator': localStorage.getItem('displayName')
+        });
     }
 
     const getChannelCreationRequest = () => {
@@ -87,15 +72,36 @@ export default function NewChannelDialog(props: {
         return request;
     }
 
-    const getResponseFromChannelCreationRequest =
-        (channelData: string, request: XMLHttpRequest): string => {
-            request.send(channelData)
-            if (request.status !== 200) {
-                return "Unexpected error :("
-            }
+    const getChannelCreationErrorObjectFrom = (result: string) => {
+        switch (result) {
+            case 'CHANNEL_NAME_TAKEN':
+                return {
+                    success: false,
+                    errorMessage: CHANNEL_NAME_TAKEN_ERROR_LABEL
+                };
 
-            return request.responseText
+            default:
+                return {
+                    success: false,
+                    errorMessage: result
+                }
+        }
     }
+
+    const hideDialogWithAnimation = () => {
+        const dialog = document.querySelector("#channelname-input-dialog");
+        if (dialog == null) {
+            throw Error("Unexpected error: dialog element not found")
+        }
+
+        dialog.classList.add("fade-out");
+    }
+
+    const removeDialogFromDOMAfterAnimationFinished = () => {
+        setTimeout(() => closeDialog(), 750);
+    }
+
+    const closeDialog = () => props.closeDialogCallback();
 
 
     // -------------- RENDERING COMPONENT ---------------
