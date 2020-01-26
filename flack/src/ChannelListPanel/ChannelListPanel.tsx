@@ -1,8 +1,7 @@
 // -------------------- IMPORTS --------------------
 
-// react components
 import React from 'react';
-
+// custom components
 import NewChannelDialog from '../NewChannelDialog/NewChannelDialog';
 import { Channel } from '../Channel';
 
@@ -25,8 +24,8 @@ import AddIcon from '@material-ui/icons/Add';
 import './ChannelListPanel.css';
 
 // Socket IO
-const io = require('socket.io-client');
-const socket = io('http://127.0.0.1:5000');
+const io = require('socket.io-client')
+const socket = io('http://127.0.0.1:5000')
 
 
 
@@ -61,77 +60,93 @@ export default function ChannelListPanel() {
 
     // --------------- HANDLER FUNCTIONS ----------------
 
-    const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
+    const handleDrawerToggle = () => setMobileOpen(!mobileOpen)
 
     const openChannel = () => "TO DO"
 
-    // ---------------- DRAWER COMPONENT ----------------
+
+    // -------------- RENDERING COMPONENTS ---------------
 
     const renderChannelListItems = (channelList: Channel[]) => {
         return channelList.map((channel, index) => {
-            return <ListItem
-                button
-                id={`channel-${index}`}
-                key={`channel-${index}`}
-                onClick={() => openChannel()}
+            return <ListItem button
+                             id={`channel-${index}`}
+                             key={`channel-${index}`}
+                             onClick={() => openChannel()}
             >
                 <ListItemText primary={channel.channelName} />
             </ListItem>
         })
     }
 
-    const drawer = (
+    const drawerContent = (
         <div id="drawer">
             <List>
-                <ListItem button onClick={() => setDisplayNewChannelDialog(true)}>
+                <ListItem button
+                          onClick={() => setDisplayNewChannelDialog(true)}>
                     <ListItemIcon><AddIcon /></ListItemIcon>
-                    <ListItemText id="add-new-channel-btn" primary="Add a new channel" />
+                    <ListItemText id="add-new-channel-btn"
+                                  primary="Add a new channel" />
                 </ListItem>
+                <Divider />
                 {renderChannelListItems(channelList)}
             </List>
-            <Divider />
         </div>
-    );
+    )
+
+    const appBar = (
+        <AppBar position="fixed" >
+            <Toolbar>
+                <IconButton
+                    color="inherit"
+                    aria-label="open drawer"
+                    edge="start"
+                    onClick={handleDrawerToggle}
+                >
+                    <MenuIcon />
+                </IconButton>
+                <Typography variant="h6" noWrap>
+                    Channels
+                </Typography>
+            </Toolbar>
+        </AppBar>
+    )
+
+    const sideBarOnSmallScreens = (
+        <Hidden mdUp implementation="css">
+            <Drawer
+                variant="temporary"
+                open={mobileOpen}
+                onClose={handleDrawerToggle}
+            >
+                {drawerContent}
+            </Drawer>
+        </Hidden>
+    )
+
+    const sideBarOnLargeScreens = (
+        <Hidden smDown implementation="css">
+            <Drawer
+                variant="permanent"
+                open
+            >
+                {drawerContent}
+            </Drawer>
+        </Hidden>
+    )
 
 
     // -------------- RENDERING COMPONENT ---------------
 
     return (
         <div>
-            <AppBar position="fixed" >
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        edge="start"
-                        onClick={handleDrawerToggle}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography variant="h6" noWrap>
-                        Channels
-                        </Typography>
-                </Toolbar>
-            </AppBar>
+            {appBar}
+
             <nav>
-                <Hidden mdUp implementation="css">
-                    <Drawer
-                        variant="temporary"
-                        open={mobileOpen}
-                        onClose={handleDrawerToggle}
-                    >
-                        {drawer}
-                    </Drawer>
-                </Hidden>
-                <Hidden smDown implementation="css">
-                    <Drawer
-                        variant="permanent"
-                        open
-                    >
-                        {drawer}
-                    </Drawer>
-                </Hidden>
+                {sideBarOnSmallScreens}
+                {sideBarOnLargeScreens}
             </nav>
+            
             {displayNewChannelDialog &&
                 <NewChannelDialog
                     closeDialogCallback={() => setDisplayNewChannelDialog(false)}
@@ -139,5 +154,4 @@ export default function ChannelListPanel() {
             }
         </div>
     );
-
 }

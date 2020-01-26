@@ -4,11 +4,13 @@
     "\\flack",
     "\\flack\\cypress",
     "\\flack\\cypress\\integration",
+    "\\flack\\cypress\\plugins",
     "\\flack\\public",
     "\\flack\\src",
-    "\\flack\\src\\FlackDialog",
-    "\\flack\\src\\NewChannelDialog"
+    "\\flack\\src\\ChannelListPanel",
+    "\\flack\\src\\DisplayNameDialog",
+    "\\flack\\src\\FlackDialog"
   ],
-  "SelectedNode": "\\flack\\src\\FlackDialog\\FlackDialog.tsx",
+  "SelectedNode": "\\flack\\src\\ChannelListPanel\\ChannelListPanel.tsx",
   "PreviewInSolutionExplorer": false
 }
