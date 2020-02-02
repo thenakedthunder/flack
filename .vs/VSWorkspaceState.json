@@ -2,15 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\flack",
-    "\\flack\\backend",
-    "\\flack\\cypress",
-    "\\flack\\cypress\\integration",
-    "\\flack\\cypress\\plugins",
     "\\flack\\public",
     "\\flack\\src",
     "\\flack\\src\\ChannelListPanel",
     "\\flack\\src\\DisplayNameDialog"
   ],
-  "SelectedNode": "\\flack\\backend\\channel.py",
   "PreviewInSolutionExplorer": false
 }

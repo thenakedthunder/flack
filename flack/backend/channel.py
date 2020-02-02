@@ -17,7 +17,8 @@ class Channel:
 
     def serialize(self):
         return {
-            'channelName': self.channel_name, 
+            'channelName': self.channel_name,
+            'creation_time': self.creation_time,
             'messages': self.messages,
             'creatorDisplayName': self.creator_name,
             'participants': self.participants
