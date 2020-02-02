@@ -4,9 +4,12 @@ import { Data } from "popper.js";
 
 export default class SecondaryTextHelper {
     static getSecondaryChannelText(channel: Channel) {
-        const { messages, timeOfCreation } = channel
+        const { messages, timeOfCreation, creatorDisplayName } = channel
         if (messages.length === 0)
-            return SecondaryTextHelper.displayCreationTime(timeOfCreation)
+            return `Created 
+                ${SecondaryTextHelper.displayCreationTime(timeOfCreation)} 
+                by ${creatorDisplayName}`
+        
 
         return "TO BE IMPLEMENTED"
     }
@@ -17,7 +20,7 @@ export default class SecondaryTextHelper {
         const timeOfCreation = SecondaryTextHelper.getTimeOfCreation(
             dateOfCreation)
 
-        return "Created today at xx:xx, no messages yet"
+        return "today at xx:xx"
     }
 
     static getDayOfCreation(dateOfCreation: Date) {
