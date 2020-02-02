@@ -12,11 +12,13 @@ class Channel:
         self.channel_name = name
         self.creation_time = time.gmtime
         self.messages = []
+        self.creator_name = display_name_of_creator
         self.participants = [display_name_of_creator]
 
     def serialize(self):
         return {
             'channelName': self.channel_name, 
             'messages': self.messages,
+            'creatorDisplayName': self.creator_name,
             'participants': self.participants
         }

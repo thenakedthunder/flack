@@ -5,6 +5,8 @@ import React from 'react';
 import NewChannelDialog from '../NewChannelDialog/NewChannelDialog';
 import { Channel } from '../Channel';
 
+import SecondaryTextHelper from './SecondaryTextHelper'
+
 // Material Components
 import AppBar from '@material-ui/core/AppBar';
 import IconButton from '@material-ui/core/IconButton';
@@ -74,7 +76,9 @@ export default function ChannelListPanel() {
                              key={`channel-${index}`}
                              onClick={() => openChannel()}
             >
-                <ListItemText primary={channel.channelName} />
+                <ListItemText
+                    primary={channel.channelName}
+                    secondary={SecondaryTextHelper.getSecondaryChannelText(channel)}/>
             </ListItem>
         })
     }
