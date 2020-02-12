@@ -14,34 +14,31 @@ export default class SecondaryTextHelper {
         return "TO BE IMPLEMENTED"
     }
 
-    static displayCreationTime(dateOfCreation: Date) {
+    static displayCreationTime(creationMoment: Moment) {
         const dayOfCreation = SecondaryTextHelper.getDayOfCreation(
-            dateOfCreation)
+            creationMoment)
         const timeOfCreation = SecondaryTextHelper.getTimeOfCreation(
-            dateOfCreation)
+            creationMoment)
 
         return "today at xx:xx"
     }
 
-    static getDayOfCreation(dateOfCreation: Date) {
-        const currentDate = new Date()
-        if (SecondaryTextHelper.creationWasToday(dateOfCreation))
-            return "today"
+    static getDayOfCreation(timeOfCreation: Moment) {
+        const currentDate = moment()
+        if (SecondaryTextHelper.creationWasToday(timeOfCreation))
+            return "Today"
 
-        if (SecondaryTextHelper.creationWasWithinAWeek(dateOfCreation))
-            return dateOfCreation.toLocaleString("en-US", { weekday: "long" })
+        if (SecondaryTextHelper.creationWasYesterday(timeOfCreation))
+            return "Yesterday"
 
-        return SecondaryTextHelper.getFormattedDate(dateOfCreation,
-            currentDate.getFullYear())
+        if (SecondaryTextHelper.creationWasWithinAWeek(timeOfCreation))
+            return timeOfCreation.format("dddd")
+
+        return SecondaryTextHelper.getFormattedDate(timeOfCreation)
     }
 
-    static getTimeOfCreation(arg0: any): any {
-        throw new Error("Method not implemented.");
-
-        //The following does not work in Typescript, because of this bug with
-        //the "hourCycle" prop: https://github.com/microsoft/TypeScript/issues/34399
-        //return dateOfCreation.toLocaleString("en-US",
-        //    { hour: "2-digit", minute: "2-digit" hourCycle: "h24" })
+    static getTimeOfCreation(creationMoment: Moment): string {
+        return creationMoment.format("H:mm")
     }
 
     static creationWasWithinAWeek(timeOfCreation: Moment): boolean {
@@ -61,6 +58,15 @@ export default class SecondaryTextHelper {
         
         return timeOfCreation.get("year") === currentTime.get("year") &&
             timeOfCreation.get("month") === currentTime.get("month") &&
+            timeOfCreation.get("date") === currentTime.get("date")
+    }
+
+    static creationWasYesterday(timeOfCreation: Moment): boolean {
+        const currentTime = moment()
+        const yesterday = currentTime.subtract(1, "days")
+
+        return timeOfCreation.get("year") === currentTime.get("year") &&
+            timeOfCreation.get("month") === yesterday.get("month") &&
             timeOfCreation.get("date") === currentTime.get("date")
     }
 
