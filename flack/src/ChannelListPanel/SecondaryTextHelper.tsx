@@ -1,5 +1,5 @@
-import { Channel } from "../Channel";
-import { Data } from "popper.js";
+import { Channel } from "../Channel"
+import moment, { Moment, duration } from "moment"
 
 
 export default class SecondaryTextHelper {
@@ -25,10 +25,10 @@ export default class SecondaryTextHelper {
 
     static getDayOfCreation(dateOfCreation: Date) {
         const currentDate = new Date()
-        if (SecondaryTextHelper.creationWasToday(dateOfCreation, currentDate))
+        if (SecondaryTextHelper.creationWasToday(dateOfCreation))
             return "today"
 
-        if (SecondaryTextHelper.creationWasWithinAWeek(dateOfCreation, currentDate))
+        if (SecondaryTextHelper.creationWasWithinAWeek(dateOfCreation))
             return dateOfCreation.toLocaleString("en-US", { weekday: "long" })
 
         return SecondaryTextHelper.getFormattedDate(dateOfCreation,
@@ -44,26 +44,33 @@ export default class SecondaryTextHelper {
         //    { hour: "2-digit", minute: "2-digit" hourCycle: "h24" })
     }
 
-    static creationWasWithinAWeek(creationDate: Date, currentDate: Date) {
-        const _MS_PER_DAY = 1000 * 60 * 60 * 24
-        const utcCurrent = currentDate.getUTCMilliseconds()
-        const utcCreation = creationDate.getUTCMilliseconds()
+    static creationWasWithinAWeek(timeOfCreation: Moment): boolean {
+        const currentTime = moment()
+        if (currentTime.diff(timeOfCreation) < 0) {
+            console.log("error thrown")
+            throw RangeError("the time of creation can not be later than " +
+                "the current time")
+        }
 
-        return Math.floor((utcCurrent - utcCreation) / _MS_PER_DAY) < 7
+        let durationInWeeks = currentTime.diff(timeOfCreation, "weeks")
+        return durationInWeeks < 1
     }
 
-    static creationWasToday(dateOfCreation: Date, currentDate: Date) {
-        return dateOfCreation.getFullYear === currentDate.getFullYear &&
-            dateOfCreation.getMonth === currentDate.getMonth &&
-            dateOfCreation.getDate === currentDate.getDate
+    static creationWasToday(timeOfCreation: Moment): boolean {
+        const currentTime = moment()
+        
+        return timeOfCreation.get("year") === currentTime.get("year") &&
+            timeOfCreation.get("month") === currentTime.get("month") &&
+            timeOfCreation.get("date") === currentTime.get("date")
     }
 
-    static getFormattedDate(dateOfCreation: Date, currentYear: number) {
-        let result = dateOfCreation.toLocaleString("en-US",
-            { month: "short", day: "long" })
+    static getFormattedDate(dateOfCreation: Moment): string {
+        const currentTime = moment()
 
-        if (dateOfCreation.getFullYear() !== currentYear)
-            result += ` ${dateOfCreation.getFullYear()}`
+        if(currentTime.get('year') === dateOfCreation.get('year'))
+            return dateOfCreation.format("dddd, MMM Do")
+        else
+            return dateOfCreation.format("dddd, MMM Do YYYY")
     }
 }
 
