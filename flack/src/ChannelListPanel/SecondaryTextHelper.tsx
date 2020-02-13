@@ -2,6 +2,16 @@ import { Channel } from "../Channel"
 import moment, { Moment, duration } from "moment"
 
 
+
+
+// IMPORTANT!!! The functions that check the dates only (e.g. they do not check
+// for exact times) should use the moment().startOf('day') function. This sets
+// the hours, minutes, seconds and milliseconds to zero. This way, for example,
+// two "timestamps", being one day apart, show that the difference between them
+// is exactly 1 day, which is correct if you only want to check that something 
+// was yesterday or not.
+
+
 export default class SecondaryTextHelper {
     static getSecondaryChannelText(channel: Channel) {
         const { messages, timeOfCreation, creatorDisplayName } = channel
@@ -15,21 +25,26 @@ export default class SecondaryTextHelper {
     }
 
     static displayCreationTime(creationMoment: Moment) {
+        // for date calculations, we are only interested in the date (having 
+        // the time part would throw off calculations) WARNING: mutability!!!
+        const creationMomentCloneForDateCalculations =
+            moment(creationMoment).startOf('day')
         const dayOfCreation = SecondaryTextHelper.getDayOfCreation(
-            creationMoment)
+            creationMomentCloneForDateCalculations)  
+
         const timeOfCreation = SecondaryTextHelper.getTimeOfCreation(
             creationMoment)
 
-        return "today at xx:xx"
+        return `${dayOfCreation} at ${timeOfCreation}`
     }
 
     static getDayOfCreation(timeOfCreation: Moment) {
         const currentDate = moment()
         if (SecondaryTextHelper.creationWasToday(timeOfCreation))
-            return "Today"
+            return "today"
 
         if (SecondaryTextHelper.creationWasYesterday(timeOfCreation))
-            return "Yesterday"
+            return "yesterday"
 
         if (SecondaryTextHelper.creationWasWithinAWeek(timeOfCreation))
             return timeOfCreation.format("dddd")
@@ -44,36 +59,30 @@ export default class SecondaryTextHelper {
     static creationWasWithinAWeek(timeOfCreation: Moment): boolean {
         const currentTime = moment()
         if (currentTime.diff(timeOfCreation) < 0) {
-            console.log("error thrown")
             throw RangeError("the time of creation can not be later than " +
                 "the current time")
         }
 
-        let durationInWeeks = currentTime.diff(timeOfCreation, "weeks")
+        const durationInWeeks = currentTime.diff(timeOfCreation, "weeks")
         return durationInWeeks < 1
     }
 
     static creationWasToday(timeOfCreation: Moment): boolean {
-        const currentTime = moment()
-        
-        return timeOfCreation.get("year") === currentTime.get("year") &&
-            timeOfCreation.get("month") === currentTime.get("month") &&
-            timeOfCreation.get("date") === currentTime.get("date")
+        const currentTime = moment().startOf('day')
+
+        return currentTime.diff(timeOfCreation) === 0
     }
 
     static creationWasYesterday(timeOfCreation: Moment): boolean {
-        const currentTime = moment()
-        const yesterday = currentTime.subtract(1, "days")
+        const currentTime = moment().startOf('day')
 
-        return timeOfCreation.get("year") === currentTime.get("year") &&
-            timeOfCreation.get("month") === yesterday.get("month") &&
-            timeOfCreation.get("date") === currentTime.get("date")
+        return currentTime.diff(timeOfCreation, 'days') === 1
     }
 
     static getFormattedDate(dateOfCreation: Moment): string {
         const currentTime = moment()
 
-        if(currentTime.get('year') === dateOfCreation.get('year'))
+        if(currentTime.year() === dateOfCreation.year())
             return dateOfCreation.format("dddd, MMM Do")
         else
             return dateOfCreation.format("dddd, MMM Do YYYY")
