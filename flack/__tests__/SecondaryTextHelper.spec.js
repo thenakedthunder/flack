@@ -2,6 +2,9 @@ import SecondaryTextHelper from "../src/ChannelListPanel/SecondaryTextHelper"
 import moment, { Moment } from "moment"
 
 
+// NOTE: getSecondaryChannelText() cannot be UNIT tested because of 
+// dependencies on the backend
+
 // Comment copied from SecondaryTextHelper.tsx:
 // IMPORTANT!!! The functions that check the dates only (e.g. they do not check
 // for exact times) should use the moment().startOf('day') function. This sets
@@ -14,6 +17,7 @@ import moment, { Moment } from "moment"
 //for validating the results which should have the name of weekdays in them
 const dayNamesArray = ["Monday", "Tuesday", "Wednesday",
     "Thursday", "Friday", "Saturday", "Sunday"]
+
 
 describe("creationWasWithinAWeek", () => {
     it("should return true when the current date and the creation date are from the same day",
@@ -186,7 +190,7 @@ describe("getDayOfCreation", () => {
             const creationDate = moment().startOf('day')
             const result = SecondaryTextHelper.getDayOfCreation(creationDate)
 
-            expect(result).toEqual("Today")
+            expect(result).toEqual("today")
         }
     )
 
@@ -195,7 +199,7 @@ describe("getDayOfCreation", () => {
             const creationDate = moment().subtract(1, 'days').startOf('day')
             const result = SecondaryTextHelper.getDayOfCreation(creationDate)
 
-            expect(result).toEqual("Yesterday")
+            expect(result).toEqual("yesterday")
         }
     )
 
@@ -210,7 +214,7 @@ describe("getDayOfCreation", () => {
         }
     )
 
-    // WARNING: in the first week of the year, this won't test every edge case
+    // WARNING: in the first week of the year this won't test every edge case
     it("should return the current format without year if the creation date was at least a week before the current date",
         () => {
             const creationDate = moment().subtract(7, 'days').startOf('day')
@@ -238,15 +242,47 @@ describe("getDayOfCreation", () => {
 })
 
 describe("displayCreationTime", () => {
-    fit("should return the correct formatted creation time",
+    it("should return the correct formatted creation time",
         () => {
             const creationMoment = moment().hour(0).minute(2)
             const result =
                 SecondaryTextHelper.displayCreationTime(creationMoment)
 
             expect(result).toEqual("today at 0:02")
-
         }
     )
-            //const creationMoment = moment("2013-02-08 24:00:00.000")
+
+    it("should return the correct formatted creation time",
+        () => {
+            const creationMoment =
+                moment().hour(9).minute(35).subtract(1, 'days')
+            const result =
+                SecondaryTextHelper.displayCreationTime(creationMoment)
+
+            expect(result).toEqual("yesterday at 9:35")
+        }
+    )
+
+    it("should return the correct formatted creation time",
+        () => {
+            const creationMoment =
+                moment().hour(14).minute(30).subtract(6, 'days')
+            const result =
+                SecondaryTextHelper.displayCreationTime(creationMoment)
+            const [dayPartOfResult, timePartOfResult] = result.split(/ (.+)/)
+
+            expect(dayNamesArray).toContain(dayPartOfResult)
+            expect(timePartOfResult).toEqual("at 14:30")
+        }
+    )
+
+    it("should return the current format without year if the creation date was at least a week before the current date",
+        () => {
+            const creationTime = moment("2017-12-22 10:02:00.000")
+            const result = SecondaryTextHelper.displayCreationTime(creationTime)
+
+            expect(result).toEqual("Friday, Dec 22nd 2017 at 10:02")
+        }
+    )
 })
+

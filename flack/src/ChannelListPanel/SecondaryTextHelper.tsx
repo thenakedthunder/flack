@@ -1,20 +1,20 @@
 import { Channel } from "../Channel"
 import moment, { Moment, duration } from "moment"
 
-
+// TODO: CHECK FOR "PURENESS" AND MUTABILITY!!!
 
 
 // IMPORTANT!!! The functions that check the dates only (e.g. they do not check
 // for exact times) should use the moment().startOf('day') function. This sets
 // the hours, minutes, seconds and milliseconds to zero. This way, for example,
 // two "timestamps", being one day apart, show that the difference between them
-// is exactly 1 day, which is correct if you only want to check that something 
+// is exactly 1 day, which is correct if you only want to check that something
 // was yesterday or not.
 
 
 export default class SecondaryTextHelper {
     static getSecondaryChannelText(channel: Channel) {
-        const { messages, timeOfCreation, creatorDisplayName } = channel
+        const { messages, creatorDisplayName } = channel
         if (messages.length === 0)
             return `Created 
                 ${SecondaryTextHelper.displayCreationTime(timeOfCreation)} 
@@ -25,13 +25,8 @@ export default class SecondaryTextHelper {
     }
 
     static displayCreationTime(creationMoment: Moment) {
-        // for date calculations, we are only interested in the date (having 
-        // the time part would throw off calculations) WARNING: mutability!!!
-        const creationMomentCloneForDateCalculations =
-            moment(creationMoment).startOf('day')
         const dayOfCreation = SecondaryTextHelper.getDayOfCreation(
-            creationMomentCloneForDateCalculations)  
-
+            moment(creationMoment))         // damn you, mutability!!! :)
         const timeOfCreation = SecondaryTextHelper.getTimeOfCreation(
             creationMoment)
 
@@ -39,7 +34,11 @@ export default class SecondaryTextHelper {
     }
 
     static getDayOfCreation(timeOfCreation: Moment) {
+        // for date calculations, we are only interested in the date (having 
+        // the time part would throw off calculations) WARNING: mutability!!!
+        timeOfCreation.startOf('day')
         const currentDate = moment()
+
         if (SecondaryTextHelper.creationWasToday(timeOfCreation))
             return "today"
 
