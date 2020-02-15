@@ -4,13 +4,13 @@
 properties
 """
 
-import time
+from datetime import datetime
 import message
 
 class Channel:
     def __init__(self, name, display_name_of_creator):
         self.channel_name = name
-        self.creation_time = time.gmtime
+        self.creation_time = datetime.now().__str__()
         self.messages = []
         self.creator_name = display_name_of_creator
         self.participants = [display_name_of_creator]

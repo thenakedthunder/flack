@@ -1,5 +1,5 @@
 import { Channel } from "../Channel"
-import moment, { Moment, duration } from "moment"
+import moment, { Moment } from "moment"
 
 // TODO: CHECK FOR "PURENESS" AND MUTABILITY!!!
 
@@ -15,10 +15,12 @@ import moment, { Moment, duration } from "moment"
 export default class SecondaryTextHelper {
     static getSecondaryChannelText(channel: Channel) {
         const { messages, creatorDisplayName } = channel
+        const timeOfCreation = moment(channel.timeOfCreation)
+
         if (messages.length === 0)
-            return `Created 
-                ${SecondaryTextHelper.displayCreationTime(timeOfCreation)} 
-                by ${creatorDisplayName}`
+            return `Created ` + 
+                `${SecondaryTextHelper.displayCreationTime(timeOfCreation)} ` +
+                `by ${creatorDisplayName}`
         
 
         return "TO BE IMPLEMENTED"
@@ -37,7 +39,6 @@ export default class SecondaryTextHelper {
         // for date calculations, we are only interested in the date (having 
         // the time part would throw off calculations) WARNING: mutability!!!
         timeOfCreation.startOf('day')
-        const currentDate = moment()
 
         if (SecondaryTextHelper.creationWasToday(timeOfCreation))
             return "today"

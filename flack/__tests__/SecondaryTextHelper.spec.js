@@ -2,8 +2,6 @@ import SecondaryTextHelper from "../src/ChannelListPanel/SecondaryTextHelper"
 import moment, { Moment } from "moment"
 
 
-// NOTE: getSecondaryChannelText() cannot be UNIT tested because of 
-// dependencies on the backend
 
 // Comment copied from SecondaryTextHelper.tsx:
 // IMPORTANT!!! The functions that check the dates only (e.g. they do not check
@@ -18,6 +16,11 @@ import moment, { Moment } from "moment"
 const dayNamesArray = ["Monday", "Tuesday", "Wednesday",
     "Thursday", "Friday", "Saturday", "Sunday"]
 
+
+
+
+// NOTE: getSecondaryChannelText() cannot be UNIT tested because of 
+// dependencies on the backend
 
 describe("creationWasWithinAWeek", () => {
     it("should return true when the current date and the creation date are from the same day",

@@ -18,6 +18,8 @@
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-scripts": "^3.3.0",
+    "rxjs": "^6.5.4",
+    "rxjs-compat": "^6.5.4",
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
     "typescript": "^3.7.2"
@@ -44,7 +46,6 @@
   "devDependencies": {
     "@testing-library/react": "^9.1.4",
     "@types/prop-types": "^15.7.3",
-    "cypress": "^3.8.2",
-    "jest": "^25.1.0"
+    "cypress": "^4.0.2"
   }
 }
