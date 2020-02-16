@@ -3,9 +3,6 @@ import moment, { Moment } from "moment"
 
 
 
-// TODO: CHECK FOR "PURENESS" AND MUTABILITY!!!
-
-
 // IMPORTANT!!! The functions that check the dates only (e.g. they do not check
 // for exact times) should use the moment().startOf('day') function. This sets
 // the hours, minutes, seconds and milliseconds to zero. This way, for example,
