@@ -1,69 +1,91 @@
-import { Channel } from "../Channel";
-import { Data } from "popper.js";
+import { Channel } from "../Channel"
+import moment, { Moment } from "moment"
+
+
+
+// IMPORTANT!!! The functions that check the dates only (e.g. they do not check
+// for exact times) should use the moment().startOf('day') function. This sets
+// the hours, minutes, seconds and milliseconds to zero. This way, for example,
+// two "timestamps", being one day apart, show that the difference between them
+// is exactly 1 day, which is correct if you only want to check that something
+// was yesterday or not.
 
 
 export default class SecondaryTextHelper {
     static getSecondaryChannelText(channel: Channel) {
-        const { messages, timeOfCreation, creatorDisplayName } = channel
-        if (messages.length === 0)
-            return `Created 
-                ${SecondaryTextHelper.displayCreationTime(timeOfCreation)} 
-                by ${creatorDisplayName}`
+        const { messages, creatorDisplayName } = channel
+        const timeOfCreation = moment(channel.timeOfCreation)
+
+        if (messages.length === 0) {
+            return `Created` +
+                ` ${SecondaryTextHelper.displayCreationTime(timeOfCreation)}` +
+                ` by ${creatorDisplayName}`
+        }
         
-
-        return "TO BE IMPLEMENTED"
+        // for when messages can be transmitted
+        throw Error("not implemented")
     }
 
-    static displayCreationTime(dateOfCreation: Date) {
+    static displayCreationTime(creationMoment: Moment) {
         const dayOfCreation = SecondaryTextHelper.getDayOfCreation(
-            dateOfCreation)
+            creationMoment)         
         const timeOfCreation = SecondaryTextHelper.getTimeOfCreation(
-            dateOfCreation)
+            creationMoment)
 
-        return "today at xx:xx"
+        return `${dayOfCreation} at ${timeOfCreation}`
     }
 
-    static getDayOfCreation(dateOfCreation: Date) {
-        const currentDate = new Date()
-        if (SecondaryTextHelper.creationWasToday(dateOfCreation, currentDate))
+    static getDayOfCreation(timeOfCreation: Moment) {
+        // for date calculations, we are only interested in the date (having 
+        // the time part would throw off calculations) WARNING: mutability!!!
+        const creationDay = moment(timeOfCreation).startOf('day')
+
+        if (SecondaryTextHelper.creationWasToday(creationDay))
             return "today"
 
-        if (SecondaryTextHelper.creationWasWithinAWeek(dateOfCreation, currentDate))
-            return dateOfCreation.toLocaleString("en-US", { weekday: "long" })
+        if (SecondaryTextHelper.creationWasYesterday(creationDay))
+            return "yesterday"
 
-        return SecondaryTextHelper.getFormattedDate(dateOfCreation,
-            currentDate.getFullYear())
+        if (SecondaryTextHelper.creationWasWithinAWeek(creationDay))
+            return creationDay.format("dddd")
+
+        return SecondaryTextHelper.getFormattedDate(creationDay)
     }
 
-    static getTimeOfCreation(arg0: any): any {
-        throw new Error("Method not implemented.");
-
-        //The following does not work in Typescript, because of this bug with
-        //the "hourCycle" prop: https://github.com/microsoft/TypeScript/issues/34399
-        //return dateOfCreation.toLocaleString("en-US",
-        //    { hour: "2-digit", minute: "2-digit" hourCycle: "h24" })
+    static getTimeOfCreation(creationMoment: Moment): string {
+        return creationMoment.format("H:mm")
     }
 
-    static creationWasWithinAWeek(creationDate: Date, currentDate: Date) {
-        const _MS_PER_DAY = 1000 * 60 * 60 * 24
-        const utcCurrent = currentDate.getUTCMilliseconds()
-        const utcCreation = creationDate.getUTCMilliseconds()
+    static creationWasToday(creationDate: Moment): boolean {
+        const currentTime = moment().startOf('day')
 
-        return Math.floor((utcCurrent - utcCreation) / _MS_PER_DAY) < 7
+        return currentTime.diff(creationDate) === 0
     }
 
-    static creationWasToday(dateOfCreation: Date, currentDate: Date) {
-        return dateOfCreation.getFullYear === currentDate.getFullYear &&
-            dateOfCreation.getMonth === currentDate.getMonth &&
-            dateOfCreation.getDate === currentDate.getDate
+    static creationWasYesterday(creationDate: Moment): boolean {
+        const currentTime = moment().startOf('day')
+
+        return currentTime.diff(creationDate, 'days') === 1
     }
 
-    static getFormattedDate(dateOfCreation: Date, currentYear: number) {
-        let result = dateOfCreation.toLocaleString("en-US",
-            { month: "short", day: "long" })
+    static creationWasWithinAWeek(creationDate: Moment): boolean {
+        const currentTime = moment()
+        if (currentTime.diff(creationDate) < 0) {
+            throw RangeError("the time of creation can not be later than " +
+                "the current time")
+        }
 
-        if (dateOfCreation.getFullYear() !== currentYear)
-            result += ` ${dateOfCreation.getFullYear()}`
+        const durationInWeeks = currentTime.diff(creationDate, "weeks")
+        return durationInWeeks < 1
+    }
+
+    static getFormattedDate(creationDate: Moment): string {
+        const currentTime = moment()
+
+        if (currentTime.year() === creationDate.year())
+            return creationDate.format("dddd, MMM Do")
+        else
+            return creationDate.format("dddd, MMM Do YYYY")
     }
 }
 

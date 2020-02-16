@@ -14,17 +14,22 @@ before(function () {
 })
 
 describe('New channel displayed in list', function () {
-    it('tests that the new channel created appears in the channel list',
+    it('tests that the new channel created appears right in the channel list',
         function () {
 
             cy.get('#add-new-channel-btn').click()
             cy.get(CHANNEL_NAME_INPUT_ID).type('Bumburnyákok')
             cy.get(SUBMIT_CHANNEL_NAME_BUTTON).click()
 
+            const currentTime = new Date()
+            const minutes = currentTime.getMinutes()
+            const minutesFormatted = minutes < 10 ? "0" + minutes : minutes
+
             cy.get('#channel-0 .MuiListItemText-primary').should('have.text',
                 'Bumburnyákok')
             cy.get('#channel-0 .MuiListItemText-secondary').should('have.text',
-                'Created today at xx:xx, no messages yet')
+                `Created today at ${currentTime.getHours()}:` +
+                `${minutesFormatted} by P.I.M.P.`)
 
         })
 
