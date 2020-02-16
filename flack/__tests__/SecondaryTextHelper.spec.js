@@ -18,7 +18,6 @@ const dayNamesArray = ["Monday", "Tuesday", "Wednesday",
 
 
 
-
 // NOTE: getSecondaryChannelText() cannot be UNIT tested because of 
 // dependencies on the backend
 
@@ -159,7 +158,7 @@ describe("getFormattedDate", () => {
 })
 
 describe("getTimeOfCreation", () => {
-    it("should return the creation time with the 'zero format' when it was at midnight",
+    it("should return the creation time with the correct zero formats (one digit for hours, two for minutes) when it was at midnight",
         () => {
             const creationTime = moment("2013-02-08 24:00:00.000")
             const result = SecondaryTextHelper.getTimeOfCreation(creationTime)
@@ -170,7 +169,7 @@ describe("getTimeOfCreation", () => {
 
     it("should return the creation time in the correct format (no leading zeroes for hours)",
         () => {
-            const creationTime = moment("2017-12-22 9:07:00.000")
+            const creationTime = moment("2017-12-22 09:07:00.000")
             const result = SecondaryTextHelper.getTimeOfCreation(creationTime)
 
             expect(result).toEqual("9:07")
@@ -206,7 +205,7 @@ describe("getDayOfCreation", () => {
         }
     )
 
-    it("should return the current format without year if the creation date was within a week of the current date",
+    it("should return the correct format without year if the creation date was within a week of the current date",
         () => {
             const creationDate = moment().subtract(6, 'days')
             const result = SecondaryTextHelper.getDayOfCreation(creationDate)
@@ -218,7 +217,7 @@ describe("getDayOfCreation", () => {
     )
 
     // WARNING: in the first week of the year this won't test every edge case
-    it("should return the current format without year if the creation date was at least a week before the current date",
+    it("should return the correct format if the creation date was at least a week before the current date",
         () => {
             const creationDate = moment().subtract(7, 'days').startOf('day')
             const result = SecondaryTextHelper.getDayOfCreation(creationDate)
@@ -233,7 +232,7 @@ describe("getDayOfCreation", () => {
         }
     )
 
-    it("should return the current format without year if the creation date was a year before the current date",
+    it("should return the correct format without year if the creation date was more than a year before the current date",
         () => {
             const creationDate = moment(`2017-12-22`)
             const result = SecondaryTextHelper.getDayOfCreation(creationDate)
@@ -258,7 +257,7 @@ describe("displayCreationTime", () => {
     it("should return the correct formatted creation time",
         () => {
             const creationMoment =
-                moment().hour(9).minute(35).subtract(1, 'days')
+                moment().subtract(1, 'days').hour(9).minute(35)
             const result =
                 SecondaryTextHelper.displayCreationTime(creationMoment)
 
@@ -269,7 +268,7 @@ describe("displayCreationTime", () => {
     it("should return the correct formatted creation time",
         () => {
             const creationMoment =
-                moment().hour(14).minute(30).subtract(6, 'days')
+                moment().subtract(6, 'days').hour(14).minute(30)
             const result =
                 SecondaryTextHelper.displayCreationTime(creationMoment)
             const [dayPartOfResult, timePartOfResult] = result.split(/ (.+)/)
@@ -279,7 +278,7 @@ describe("displayCreationTime", () => {
         }
     )
 
-    it("should return the current format without year if the creation date was at least a week before the current date",
+    it("should return the correct format with year if the creation date was more than a year before the current date",
         () => {
             const creationTime = moment("2017-12-22 10:02:00.000")
             const result = SecondaryTextHelper.displayCreationTime(creationTime)

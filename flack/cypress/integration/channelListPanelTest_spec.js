@@ -47,15 +47,3 @@ describe('New channel not added when dialog cancelled', function () {
         })
 
 })
-
-//describe('Channel creation data displayed when new channel is created', function () {
-//    it('tests that a channel with no messages displays its creation date and creator name in the secondary text part',
-//        function () {
-
-//            cy.get('#add-new-channel-btn').click()
-//            cy.get(CHANNEL_NAME_INPUT_ID).type('mamlaszok')
-//            cy.get(SUBMIT_CHANNEL_NAME_BUTTON).click()
-
-
-//        })
-//})

@@ -1,6 +1,8 @@
 import { Channel } from "../Channel"
 import moment, { Moment } from "moment"
 
+
+
 // TODO: CHECK FOR "PURENESS" AND MUTABILITY!!!
 
 
@@ -17,18 +19,19 @@ export default class SecondaryTextHelper {
         const { messages, creatorDisplayName } = channel
         const timeOfCreation = moment(channel.timeOfCreation)
 
-        if (messages.length === 0)
-            return `Created ` + 
-                `${SecondaryTextHelper.displayCreationTime(timeOfCreation)} ` +
-                `by ${creatorDisplayName}`
+        if (messages.length === 0) {
+            return `Created` +
+                ` ${SecondaryTextHelper.displayCreationTime(timeOfCreation)}` +
+                ` by ${creatorDisplayName}`
+        }
         
-
-        return "TO BE IMPLEMENTED"
+        // for when messages can be transmitted
+        throw Error("not implemented")
     }
 
     static displayCreationTime(creationMoment: Moment) {
         const dayOfCreation = SecondaryTextHelper.getDayOfCreation(
-            moment(creationMoment))         // damn you, mutability!!! :)
+            creationMoment)         
         const timeOfCreation = SecondaryTextHelper.getTimeOfCreation(
             creationMoment)
 
@@ -38,54 +41,54 @@ export default class SecondaryTextHelper {
     static getDayOfCreation(timeOfCreation: Moment) {
         // for date calculations, we are only interested in the date (having 
         // the time part would throw off calculations) WARNING: mutability!!!
-        timeOfCreation.startOf('day')
+        const creationDay = moment(timeOfCreation).startOf('day')
 
-        if (SecondaryTextHelper.creationWasToday(timeOfCreation))
+        if (SecondaryTextHelper.creationWasToday(creationDay))
             return "today"
 
-        if (SecondaryTextHelper.creationWasYesterday(timeOfCreation))
+        if (SecondaryTextHelper.creationWasYesterday(creationDay))
             return "yesterday"
 
-        if (SecondaryTextHelper.creationWasWithinAWeek(timeOfCreation))
-            return timeOfCreation.format("dddd")
+        if (SecondaryTextHelper.creationWasWithinAWeek(creationDay))
+            return creationDay.format("dddd")
 
-        return SecondaryTextHelper.getFormattedDate(timeOfCreation)
+        return SecondaryTextHelper.getFormattedDate(creationDay)
     }
 
     static getTimeOfCreation(creationMoment: Moment): string {
         return creationMoment.format("H:mm")
     }
 
-    static creationWasWithinAWeek(timeOfCreation: Moment): boolean {
+    static creationWasToday(creationDate: Moment): boolean {
+        const currentTime = moment().startOf('day')
+
+        return currentTime.diff(creationDate) === 0
+    }
+
+    static creationWasYesterday(creationDate: Moment): boolean {
+        const currentTime = moment().startOf('day')
+
+        return currentTime.diff(creationDate, 'days') === 1
+    }
+
+    static creationWasWithinAWeek(creationDate: Moment): boolean {
         const currentTime = moment()
-        if (currentTime.diff(timeOfCreation) < 0) {
+        if (currentTime.diff(creationDate) < 0) {
             throw RangeError("the time of creation can not be later than " +
                 "the current time")
         }
 
-        const durationInWeeks = currentTime.diff(timeOfCreation, "weeks")
+        const durationInWeeks = currentTime.diff(creationDate, "weeks")
         return durationInWeeks < 1
     }
 
-    static creationWasToday(timeOfCreation: Moment): boolean {
-        const currentTime = moment().startOf('day')
-
-        return currentTime.diff(timeOfCreation) === 0
-    }
-
-    static creationWasYesterday(timeOfCreation: Moment): boolean {
-        const currentTime = moment().startOf('day')
-
-        return currentTime.diff(timeOfCreation, 'days') === 1
-    }
-
-    static getFormattedDate(dateOfCreation: Moment): string {
+    static getFormattedDate(creationDate: Moment): string {
         const currentTime = moment()
 
-        if(currentTime.year() === dateOfCreation.year())
-            return dateOfCreation.format("dddd, MMM Do")
+        if (currentTime.year() === creationDate.year())
+            return creationDate.format("dddd, MMM Do")
         else
-            return dateOfCreation.format("dddd, MMM Do YYYY")
+            return creationDate.format("dddd, MMM Do YYYY")
     }
 }
 
