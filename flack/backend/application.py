@@ -41,25 +41,36 @@ def create_channel():
     
     if (response == 'SUCCESS'):
         channel_registry.add_new_channel_to_channels_list(data)
-
-        socketio.emit("new channel created", 
-             {"channels": [channel.serialize() for channel in 
-                           channel_registry.get_channel_list()]}, 
-             broadcast=True)
+        update_channels_from_server_memory()
 
     return response
 
 
+
 # ------------------- SOCKETS -------------------
 
-@socketio.on("message submitted")
-def add_message_to_channel(data):
-    #get data from user input
-    message_text = data["messageText"]
-    display_name = data["display_name_of_sender"]
-    channel_name = data["channelName"]
+
+@socketio.on("update channels")
+@cross_origin(origin='localhost',headers=['Content- Type','Authorization'])
+def update_channels():
+    if not(channel_registry.is_channel_list_empty()):
+        update_channels_from_server_memory()  
+
+#TODO: helper method, find a good place for it!
+def update_channels_from_server_memory():
+    socketio.emit("new channel(s) in memory", 
+         {"channels": [channel.serialize() for channel in 
+                       channel_registry.get_channel_list()]}, 
+         broadcast=True)
+
+#@socketio.on("message submitted")
+#def add_message_to_channel(data):
+#    #get data from user input
+#    message_text = data["messageText"]
+#    display_name = data["display_name_of_sender"]
+#    channel_name = data["channelName"]
     
-    channel = channel_registry.get_channel_from(channel_name)
+#    channel = channel_registry.get_channel_from(channel_name)
 
 
 

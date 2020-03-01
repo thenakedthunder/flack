@@ -135,6 +135,35 @@ class channel_registry_tests(unittest.TestCase):
         self.assertFalse("Pink" in self.channel_registry.
                          get_channel_list()[0].participants)
 
+    def test_is_channel_list_empty_with_empty_list(self):
+        """the is_channel_list_empty function should return true if the stored
+        list is empty"""
+        self.channel_registry.clear_channel_list()
+        result = self.channel_registry.is_channel_list_empty()
+
+        self.assertTrue(result)
+
+    def test_is_channel_list_empty_with_a_one_item_list(self):
+        """the is_channel_list_empty function should return false if the stored
+        list has an element"""
+        self.channel_registry.setup_channels_list_with([
+            Channel("Dirty Fred the Captain", "P.Howard")])
+        result = self.channel_registry.is_channel_list_empty()
+
+        self.assertFalse(result)
+
+    def test_is_channel_list_empty_with_a_list_with_more_items(self):
+        """the is_channel_list_empty function should return false if the stored
+        list has more elements"""
+        self.channel_registry.setup_channels_list_with([
+            Channel("roger", "Pink"), 
+            Channel("dave", "Pink"),
+            Channel("rick", "Pink"),
+            Channel("nick", "Pink")])
+        result = self.channel_registry.is_channel_list_empty()
+
+        self.assertFalse(result)
+
     #def test_8_message_given_to_channel(self):
     #    """add_message_to_channel test: new message is given to the channel"""
     #    self.setup_channels_list_with([Channel("Roger", "Pink")])

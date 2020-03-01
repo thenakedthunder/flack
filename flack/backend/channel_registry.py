@@ -51,6 +51,9 @@ class Channel_registry:
     def get_channel_list(self):
         return self.__channels
 
+    def is_channel_list_empty(self):
+        return len(self.__channels) == 0
+
     #def get_channel_from(self, channel_name):
     #    """gets the channel with the given name from the channels list"""
     #    channels_with_given_name = [c for c in channels if c.channel_name == 

@@ -49,22 +49,26 @@ export default function ChannelListPanel() {
     // for holding channel names
     const [channelList, updateChannelList] =
         React.useState(new Array<Channel>())
+    const [channelSelected, setChannelSelected] =
+        React.useState(channelList.length ? channelList[0] : null)
 
 
     // ------------ WEBSOCKET IMPLEMENTATION ------------
 
     React.useEffect(() => {
-        socket.on('new channel created', (payload: Payload) => {
+        socket.emit('update channels')
+
+        socket.on('new channel(s) in memory', (payload: Payload) => {
             updateChannelList(payload.channels)
         });
-    });
+    }, []);
 
 
     // --------------- HANDLER FUNCTIONS ----------------
 
     const handleDrawerToggle = () => setMobileOpen(!mobileOpen)
 
-    const openChannel = () => "TO DO"
+    const openChannel = () => console.log("TO DO")
 
 
     // -------------- RENDERING COMPONENTS ---------------
@@ -78,7 +82,8 @@ export default function ChannelListPanel() {
             >
                 <ListItemText
                     primary={channel.channelName}
-                    secondary={SecondaryTextHelper.getSecondaryChannelText(channel)}/>
+                    secondary={SecondaryTextHelper.getSecondaryChannelText(
+                        channel)} />
             </ListItem>
         })
     }
