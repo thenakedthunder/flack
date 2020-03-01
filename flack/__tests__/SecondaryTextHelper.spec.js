@@ -141,9 +141,11 @@ describe("getFormattedDate", () => {
             const currentYear = moment().get('year')
             const creationDate = moment(`${currentYear}-02-10`)
             const result = SecondaryTextHelper.getFormattedDate(creationDate)
-            const [dayNamePart, datePart] = result.split(/, /)
+            const [dayPart, datePart] = result.split(/, /)
+            const [on_Prefix, dayName] = dayPart.split(/ /)
 
-            expect(dayNamesArray).toContain(dayNamePart)
+            expect(on_Prefix).toEqual("on")
+            expect(dayNamesArray).toContain(dayName)
             expect(datePart).toEqual("Feb 10th")
         }
     )
@@ -152,7 +154,7 @@ describe("getFormattedDate", () => {
         () => {
             const creationDate = moment(`2017-12-22`)
             const result = SecondaryTextHelper.getFormattedDate(creationDate)
-            expect(result).toEqual("Friday, Dec 22nd 2017")
+            expect(result).toEqual("on Friday, Dec 22nd 2017")
         }
     )
 })
@@ -209,10 +211,11 @@ describe("getDayOfCreation", () => {
         () => {
             const creationDate = moment().subtract(6, 'days')
             const result = SecondaryTextHelper.getDayOfCreation(creationDate)
-            const expectedResult = creationDate.format("dddd")
+
+            const expectedResult = "on " + creationDate.format("dddd")
 
             expect(result).toEqual(expectedResult)
-            expect(dayNamesArray).toContain(result)
+            expect(dayNamesArray).toContain(result.split(/ /)[1])
         }
     )
 
@@ -224,9 +227,9 @@ describe("getDayOfCreation", () => {
 
             let expectedResult
             if (creationDate.year() === moment().year())
-                expectedResult = creationDate.format("dddd, MMM Do")
+                expectedResult = "on " + creationDate.format("dddd, MMM Do")
             else
-                expectedResult = creationDate.format("dddd, MMM Do YYYY")
+                expectedResult = "on " + creationDate.format("dddd, MMM Do YYYY")
 
             expect(result).toEqual(expectedResult)
         }
@@ -237,7 +240,7 @@ describe("getDayOfCreation", () => {
             const creationDate = moment(`2017-12-22`)
             const result = SecondaryTextHelper.getDayOfCreation(creationDate)
 
-            expect(result).toEqual("Friday, Dec 22nd 2017")
+            expect(result).toEqual("on Friday, Dec 22nd 2017")
         }
     )
 
@@ -271,8 +274,11 @@ describe("displayCreationTime", () => {
                 moment().subtract(6, 'days').hour(14).minute(30)
             const result =
                 SecondaryTextHelper.displayCreationTime(creationMoment)
-            const [dayPartOfResult, timePartOfResult] = result.split(/ (.+)/)
+            const [on_Prefix, resultWithoutPrefix] = result.split(/ (.+)/)
+            const [dayPartOfResult, timePartOfResult] =
+                resultWithoutPrefix.split(/ (.+)/)
 
+            expect(on_Prefix).toEqual("on")
             expect(dayNamesArray).toContain(dayPartOfResult)
             expect(timePartOfResult).toEqual("at 14:30")
         }
@@ -283,7 +289,7 @@ describe("displayCreationTime", () => {
             const creationTime = moment("2017-12-22 10:02:00.000")
             const result = SecondaryTextHelper.displayCreationTime(creationTime)
 
-            expect(result).toEqual("Friday, Dec 22nd 2017 at 10:02")
+            expect(result).toEqual("on Friday, Dec 22nd 2017 at 10:02")
         }
     )
 })

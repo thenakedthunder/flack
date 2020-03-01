@@ -47,7 +47,7 @@ export default class SecondaryTextHelper {
             return "yesterday"
 
         if (SecondaryTextHelper.creationWasWithinAWeek(creationDay))
-            return creationDay.format("dddd")
+            return "on " + creationDay.format("dddd")
 
         return SecondaryTextHelper.getFormattedDate(creationDay)
     }
@@ -83,9 +83,9 @@ export default class SecondaryTextHelper {
         const currentTime = moment()
 
         if (currentTime.year() === creationDate.year())
-            return creationDate.format("dddd, MMM Do")
+            return "on " + creationDate.format("dddd, MMM Do")
         else
-            return creationDate.format("dddd, MMM Do YYYY")
+            return "on " + creationDate.format("dddd, MMM Do YYYY")
     }
 }
 
