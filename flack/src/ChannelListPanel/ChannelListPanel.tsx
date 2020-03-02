@@ -90,7 +90,7 @@ export default function ChannelListPanel() {
 
     const drawerContent = (
         <div id="drawer">
-            <List>
+            <List id="drawer-list-items">
                 <ListItem button
                           onClick={() => setDisplayNewChannelDialog(true)}>
                     <ListItemIcon><AddIcon /></ListItemIcon>

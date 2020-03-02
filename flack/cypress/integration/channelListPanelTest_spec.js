@@ -7,9 +7,7 @@ const CANCEL_BUTTON = '#cancel-btn'
 
 before(function () {
 
-    cy.visit('http://127.0.0.1:5000/')
-    cy.get('#displayname-input').type('P.I.M.P.')
-    cy.get('#display-name-ok-btn').click()
+    reloadPageAndPutInDisplayName();
 
 })
 
@@ -47,3 +45,28 @@ describe('New channel not added when dialog cancelled', function () {
         })
 
 })
+
+describe('Channels stored in memory displayed on (re)load', function () {
+    it('tests that channels existing in server memory appear in the channel list on load/reload',
+        function () {
+
+            cy.get('#add-new-channel-btn').click()
+            cy.get(CHANNEL_NAME_INPUT_ID).type('Hímpellér F.C.')
+            cy.get(SUBMIT_CHANNEL_NAME_BUTTON).click()
+
+            cy.get('#add-new-channel-btn').click()
+            cy.get(CHANNEL_NAME_INPUT_ID).type('Mesüge Bt.')
+            cy.get(SUBMIT_CHANNEL_NAME_BUTTON).click()
+
+            reloadPageAndPutInDisplayName()
+
+            cy.get('#channel-1 .MuiListItemText-primary').should('have.text', 'Hímpellér F.C.')
+            cy.get('#channel-2 .MuiListItemText-primary').should('have.text', 'Mesüge Bt.')
+        })
+})
+
+function reloadPageAndPutInDisplayName() {
+    cy.visit('http://127.0.0.1:5000/');
+    cy.get('#displayname-input').type('P.I.M.P.');
+    cy.get('#display-name-ok-btn').click();
+}
