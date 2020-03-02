@@ -24,6 +24,7 @@ import AddIcon from '@material-ui/icons/Add';
 
 // styling
 import './ChannelListPanel.css';
+import ChannelViewPane from '../ChannelViewPane/ChannelViewPane';
 
 // Socket IO
 const io = require('socket.io-client')
@@ -68,7 +69,8 @@ export default function ChannelListPanel() {
 
     const handleDrawerToggle = () => setMobileOpen(!mobileOpen)
 
-    const openChannel = () => console.log("TO DO")
+    const handleOpenChannelClick = (event: Event) =>
+        setChannelSelected(event.target.id)
 
 
     // -------------- RENDERING COMPONENTS ---------------
@@ -78,7 +80,8 @@ export default function ChannelListPanel() {
             return <ListItem button
                              id={`channel-${index}`}
                              key={`channel-${index}`}
-                             onClick={() => openChannel()}
+                onClick={() => handleOpenChannelClick
+                    ()}
             >
                 <ListItemText
                     primary={channel.channelName}
@@ -155,6 +158,10 @@ export default function ChannelListPanel() {
                 {sideBarOnSmallScreens}
                 {sideBarOnLargeScreens}
             </nav>
+
+            {channelSelected &&
+                <ChannelViewPane channelSelected={channelSelected} />
+            }
             
             {displayNewChannelDialog &&
                 <NewChannelDialog
