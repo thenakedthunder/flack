@@ -4,4 +4,5 @@ export interface Channel {
     messages: string[]
     creatorDisplayName: string
     participants: string[]
+    creationInfo: string
 }

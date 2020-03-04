@@ -20,7 +20,7 @@ describe('Channel view shows basic channel data correctly', function () {
             cy.get(SUBMIT_CHANNEL_NAME_BUTTON).click()
 
             cy.get("#drawer-list-items").children().last().click()
-            cy.get("channel-name").should('have.text', 'Ebugatták gyülekezete')
+            cy.get("#channel-name").should('have.text', 'Ebugatták gyülekezete')
 
             const currentTime = new Date()
             const minutes = currentTime.getMinutes()

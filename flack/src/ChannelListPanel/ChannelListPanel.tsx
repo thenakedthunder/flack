@@ -1,6 +1,6 @@
 // -------------------- IMPORTS --------------------
 
-import React from 'react';
+import React, { MouseEvent } from 'react';
 // custom components
 import NewChannelDialog from '../NewChannelDialog/NewChannelDialog';
 import { Channel } from '../Channel';
@@ -69,19 +69,25 @@ export default function ChannelListPanel() {
 
     const handleDrawerToggle = () => setMobileOpen(!mobileOpen)
 
-    const handleOpenChannelClick = (event: Event) =>
-        setChannelSelected(event.target.id)
+    const handleOpenChannelClick = (event: React.MouseEvent<HTMLDivElement>) =>
+        setChannelSelected(getSelectedChannelFromChannelName(
+            event.currentTarget.dataset.channelName))
+
+    const getSelectedChannelFromChannelName =
+        (channelName: string | undefined): Channel => 
+            channelList.filter(channel => channel.channelName === channelName)[0]
 
 
     // -------------- RENDERING COMPONENTS ---------------
 
     const renderChannelListItems = (channelList: Channel[]) => {
         return channelList.map((channel, index) => {
-            return <ListItem button
-                             id={`channel-${index}`}
-                             key={`channel-${index}`}
-                onClick={() => handleOpenChannelClick
-                    ()}
+            return <ListItem
+                button
+                id={`channel-${index}`}
+                key={`channel-${index}`}
+                onClick={handleOpenChannelClick}
+                data-channel-name={channel.channelName}
             >
                 <ListItemText
                     primary={channel.channelName}
@@ -160,7 +166,10 @@ export default function ChannelListPanel() {
             </nav>
 
             {channelSelected &&
-                <ChannelViewPane channelSelected={channelSelected} />
+                <ChannelViewPane
+                    channelSelected={channelSelected}
+                    drawerOpen= {mobileOpen}    
+                />
             }
             
             {displayNewChannelDialog &&
