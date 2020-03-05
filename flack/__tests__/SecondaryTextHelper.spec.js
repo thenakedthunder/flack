@@ -12,7 +12,7 @@ import moment, { Moment } from "moment"
 // was yesterday or not.
 
 
-//for validating the results which should have the name of weekdays in them
+//for validating the results which have the name of weekdays in them
 const dayNamesArray = ["Monday", "Tuesday", "Wednesday",
     "Thursday", "Friday", "Saturday", "Sunday"]
 

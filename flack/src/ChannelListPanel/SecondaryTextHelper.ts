@@ -71,8 +71,8 @@ export default class SecondaryTextHelper {
     static creationWasWithinAWeek(creationDate: Moment): boolean {
         const currentTime = moment()
         if (currentTime.diff(creationDate) < 0) {
-                throw RangeError("the time of creation can not be later than " +
-                    "the current time")
+            throw RangeError("the time of creation can not be later than " +
+                "the current time")
         }
 
         const durationInWeeks = currentTime.diff(creationDate, "weeks")
