@@ -57,7 +57,7 @@ export default function NewChannelDialog(props: NewChannelDialogProps) {
 
     const getChannelDataJSON = (newChannelName: string) => {
         return JSON.stringify({
-            'newChannelName': newChannelName,
+            'new_channel_name': newChannelName,
             'display_name_of_creator': localStorage.getItem('displayName')
         });
     }

@@ -5,8 +5,6 @@ import React from 'react';
 import NewChannelDialog from '../NewChannelDialog/NewChannelDialog';
 import { Channel } from '../Channel';
 
-import SecondaryTextHelper from './SecondaryTextHelper'
-
 // Material Components
 import AppBar from '@material-ui/core/AppBar';
 import IconButton from '@material-ui/core/IconButton';
@@ -67,7 +65,19 @@ export default function ChannelListPanel() {
     const openChannel = () => "TO DO"
 
 
-    // -------------- RENDERING COMPONENTS ---------------
+    // -------------- COMPONENTS ---------------
+
+    const getSecondaryChannelText = (channel: Channel) => {
+        const { messages, creatorDisplayName, creationTime} = channel
+
+        if (messages.length === 0) {
+            return `Created ` + creationTime + ` by ${creatorDisplayName}`
+        }
+
+        //// for when messages can be transmitted
+        //throw Error("not implemented")
+    }
+
 
     const renderChannelListItems = (channelList: Channel[]) => {
         return channelList.map((channel, index) => {
@@ -78,7 +88,7 @@ export default function ChannelListPanel() {
             >
                 <ListItemText
                     primary={channel.channelName}
-                    secondary={SecondaryTextHelper.getSecondaryChannelText(channel)}/>
+                    secondary={getSecondaryChannelText(channel)} />
             </ListItem>
         })
     }

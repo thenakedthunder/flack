@@ -37,7 +37,7 @@ def index():
 def create_channel():
     data = request.json
     response = channel_registry.get_response_for_channel_creation_request(
-        data["newChannelName"])
+        data["new_channel_name"])
     
     if (response == 'SUCCESS'):
         channel_registry.add_new_channel_to_channels_list(data)

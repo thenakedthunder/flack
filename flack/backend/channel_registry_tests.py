@@ -73,7 +73,7 @@ class channel_registry_tests(unittest.TestCase):
         self.channel_registry.clear_channel_list()
 
         data = {
-          "newChannelName": "a channel for idiots",
+          "new_channel_name": "a channel for idiots",
           "display_name_of_creator": "the king of all idiots"
         }
         self.channel_registry.add_new_channel_to_channels_list(data)
@@ -89,7 +89,7 @@ class channel_registry_tests(unittest.TestCase):
             Channel("dave", "Pink")])
         
         data = {
-          "newChannelName": "a channel for idiots",
+          "new_channel_name": "a channel for idiots",
           "display_name_of_creator": "the king of all idiots"
         }
         self.channel_registry.add_new_channel_to_channels_list(data)
@@ -108,7 +108,7 @@ class channel_registry_tests(unittest.TestCase):
             Channel("nick", "Pink")])
         
         data = {
-          "newChannelName": "a channel for idiots",
+          "new_channel_name": "a channel for idiots",
           "display_name_of_creator": "the king of all idiots"
         }
         self.channel_registry.add_new_channel_to_channels_list(data)
