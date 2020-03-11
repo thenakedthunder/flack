@@ -44,7 +44,7 @@ class Channel_registry:
         return 'SUCCESS'
 
     def add_new_channel_to_channels_list(self, data):
-        new_channel = Channel(data["newChannelName"], 
+        new_channel = Channel(data["new_channel_name"], 
                               data["display_name_of_creator"])
         self.__channels.append(new_channel)
 
