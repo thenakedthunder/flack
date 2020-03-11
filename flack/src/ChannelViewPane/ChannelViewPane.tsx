@@ -31,7 +31,10 @@ export default function ChannelListPanel(props: ChannelViewPaneProps) {
     return (
         <div style={contentStyle}>
             <h2 id="channel-name">{props.channelSelected.channelName}</h2>
-            <p id="channel-creation-info"></p>
+            <p id="channel-creation-info">
+                {"Created by " + props.channelSelected.creatorDisplayName + 
+                props.channelSelected.creationTime}
+            </p>
             <div id="messages"></div>
             <div>
                 <TextField
