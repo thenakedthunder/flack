@@ -4,9 +4,8 @@
 properties
 """
 
-from datetime import datetime, timedelta
+from datetime import datetime
 import message
-import enum 
   
 
 class Channel:
@@ -52,8 +51,7 @@ class Channel:
             return self._get_formatted_date()       #returns full date
 
     def _get_time_of_creation(self):
-        """WARNING: '%#H' works on Windows, but on UNIX??? ('%-H' can be tried 
-        there)
+        """'%#H' works on Windows, AND on my Raspberry Pi!
         returns H:MM format (padding zeroes for minutes but not for hours)
         """
         return self.creation_time.strftime("%#H:%M")
@@ -68,8 +66,7 @@ class Channel:
         return (datetime.today().date() - self.creation_time.date()).days
    
     def _get_formatted_date(self):
-        """WARNING: '%#d' works on Windows, but on UNIX??? ('%-d' can be tried 
-        there)
+        """'%#H' works on Windows, AND on my Raspberry Pi!
         if the creation was not this year, the date returned contains the year
         """
         if (datetime.today().year == self.creation_time.year):
