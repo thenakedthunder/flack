@@ -25,7 +25,6 @@ class channel_tests(unittest.TestCase):
         current system time
         """
         test_channel = Channel("Kerekes", "Tanyasi Jóska")
-        test_channel.creation_time = datetime.now()
 
         try:
             test_channel._check_if_creation_time_is_valid()
@@ -59,8 +58,6 @@ class channel_tests(unittest.TestCase):
     def test_get_how_many_days_ago_was_creation_today(self):
         """should return 0 if the creation day is the current day"""
         test_channel = Channel("Kerekes", "Tanyasi Jóska")
-        #input without time details
-        test_channel.creation_time = datetime.today()   
 
         self.assertEqual(test_channel._get_how_many_days_ago_was_creation(), 0)
 
@@ -88,16 +85,16 @@ class channel_tests(unittest.TestCase):
 
         self.assertEqual(test_channel._get_how_many_days_ago_was_creation(), 7)
 
-    def test_get_how_many_days_ago_was_creation_365_days_ago(self):
-        """should return 365 when the current date and the creation date are 
-        365 days apart. 
+    def test_get_how_many_days_ago_was_creation_366_days_ago(self):
+        """should return 366 when the current date and the creation date are 
+        366 days apart. 
         NOTE: using days instead of years is intentional (leap years!)
         """
         test_channel = Channel("My Ballad", "John Henry")
-        test_channel.creation_time = datetime.today() - timedelta(365)
+        test_channel.creation_time = datetime.today() - timedelta(366)
 
         self.assertEqual(test_channel._get_how_many_days_ago_was_creation(),
-                        365)
+                        366)
 
 
     """Tests for get_formatted_date"""
@@ -163,7 +160,6 @@ class channel_tests(unittest.TestCase):
         """should return 'today' if the creation date is the same as the
         current date"""
         test_channel = Channel("Cream", "Strange Brew")
-        test_channel.creation_time = datetime.today()
 
         self.assertEqual(test_channel._get_day_of_creation(), "today")
 
@@ -188,11 +184,11 @@ class channel_tests(unittest.TestCase):
     def test_get_day_of_creation_from_7_days_back(self):
         """should return the correct format without year if the creation date 
         was at least a week before the current date
-        WARNING! in the first week of the year this won't test every edge case
         """
         test_channel = Channel("Cream", "Strange Brew")
         test_channel.creation_time = datetime.today() - timedelta(7)
 
+        #WARNING! in the first week of the year this case is not tested
         if test_channel.creation_time.year == datetime.today().year:
             expected_result = test_channel.creation_time.strftime(
                 "on %A, %#d %b")

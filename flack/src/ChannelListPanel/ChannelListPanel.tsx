@@ -74,8 +74,8 @@ export default function ChannelListPanel() {
             return `Created ` + creationTime + ` by ${creatorDisplayName}`
         }
 
-        //// for when messages can be transmitted
-        //throw Error("not implemented")
+        // else: for when messages can be transmitted
+        throw Error("not implemented")
     }
 
 
