@@ -155,7 +155,6 @@ export default function ChannelListPanel() {
         <Hidden smDown implementation="css">
             <Drawer
                 variant="permanent"
-                open
             >
                 {drawerContent}
             </Drawer>
